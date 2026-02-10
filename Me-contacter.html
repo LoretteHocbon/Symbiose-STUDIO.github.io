@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Symbiose Studio — Contact</title>
+
+  <style>
+    /* =======================
+       TOKENS (DA) — identiques à tes autres pages
+    ======================= */
+    :root{
+      --green:#AEB021;
+      --violet:#6E3BBA;
+      --rust:#AE0404;
+      --white:#F0EFEA;
+      --anthracite:#3A2F29;
+
+      --bg: var(--green);
+      --text: var(--white);
+      --nav-text: var(--anthracite);
+
+      /* Glass (nav + surfaces) */
+      --glass-bg: rgba(58,47,41,.26);
+      --glass-bg-hover: rgba(58,47,41,.36);
+      --glass-border: rgba(58,47,41,.65);
+      --glass-highlight: rgba(255,255,255,.10);
+      --shadow: rgba(0,0,0,.28);
+
+      /* Surfaces claires (cards/form) */
+      --panel-bg: rgba(240,239,234,.88);
+      --panel-border: rgba(58,47,41,.18);
+
+      /* Layout */
+      --radius: 26px;
+      --gap: 22px;
+      --page-pad-x: 8vw;
+    }
+
+    /* Fonts (si tu les as déjà) */
+    @font-face{
+      font-family:"Pain de mie";
+      src:url("fonts/PainDeMie.woff2") format("woff2");
+      font-weight:400;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face{
+      font-family:"Outfit";
+      src:url("fonts/Outfit-Regular.woff2") format("woff2");
+      font-weight:400;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face{
+      font-family:"Outfit";
+      src:url("fonts/Outfit-Bold.woff2") format("woff2");
+      font-weight:700;
+      font-style:normal;
+      font-display:swap;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ margin:0; padding:0; }
+
+    body{
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Outfit", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      overflow-x:hidden;
+    }
+
+    @keyframes spin{
+      from{ transform: rotate(0deg); }
+      to{ transform: rotate(360deg); }
+    }
+
+    /* =======================
+       NAV FIXE (desktop + burger) — COPIE IDENTIQUE
+    ======================= */
+    .topbar-wrap{
+      position: fixed;
+      top: 18px;
+      left: 0;
+      right: 0;
+      display:flex;
+      justify-content:center;
+      z-index: 999;
+      pointer-events:none;
+    }
+
+    .topbar{
+      pointer-events:auto;
+      display:flex;
+      gap: 42px;
+      padding: 10px 36px;
+      border-radius: 999px;
+
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+
+      box-shadow:
+        0 18px 40px rgba(0,0,0,.32),
+        inset 0 1px 0 var(--glass-highlight);
+
+      backdrop-filter: blur(22px) saturate(140%);
+      -webkit-backdrop-filter: blur(22px) saturate(140%);
+    }
+
+    .nav-link{
+      text-decoration:none;
+      color: var(--nav-text);
+      font-size: 15px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 10px 16px;
+      border-radius: 999px;
+      transition: transform .25s ease, background .25s ease;
+    }
+    .nav-link:hover{
+      transform: translateY(-1px);
+      background: rgba(240,239,234,.18);
+    }
+
+    .menu-toggle{
+      pointer-events:auto;
+      display:none;
+
+      width:56px;
+      height:56px;
+      border-radius:999px;
+
+      border:1px solid var(--glass-border);
+      background: var(--glass-bg);
+
+      box-shadow:
+        0 12px 30px rgba(0,0,0,.22),
+        inset 0 1px 0 var(--glass-highlight);
+
+      backdrop-filter: blur(22px) saturate(140%);
+      -webkit-backdrop-filter: blur(22px) saturate(140%);
+
+      cursor:pointer;
+
+      position:absolute;
+      left: 20px;
+      top: 0;
+    }
+
+    .menu-toggle span{
+      display:block;
+      width:22px;
+      height:2px;
+      margin:5px auto;
+      background: var(--anthracite);
+      border-radius: 2px;
+    }
+
+    .mobile-menu{
+      pointer-events:auto;
+      position:absolute;
+      top:96px;
+      left:20px;
+      right:20px;
+      max-width:320px;
+
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+
+      transform:scaleY(0);
+      transform-origin:top;
+      transition:.35s cubic-bezier(.34,1.56,.64,1);
+    }
+
+    .mobile-menu.open{ transform:scaleY(1); }
+
+    .mobile-menu .nav-link{
+      display:block;
+      width:100%;
+
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+
+      box-shadow:
+        0 12px 30px rgba(0,0,0,.22),
+        inset 0 1px 0 var(--glass-highlight);
+
+      backdrop-filter: blur(22px) saturate(140%);
+      -webkit-backdrop-filter: blur(22px) saturate(140%);
+
+      transform:translateY(-10px);
+      opacity:0;
+      transition:.35s;
+    }
+
+    .mobile-menu.open .nav-link{
+      transform:translateY(0);
+      opacity:1;
+    }
+
+    .mobile-menu.open .nav-link:nth-child(1){transition-delay:.05s}
+    .mobile-menu.open .nav-link:nth-child(2){transition-delay:.12s}
+    .mobile-menu.open .nav-link:nth-child(3){transition-delay:.19s}
+
+    /* =======================
+       PAGE CONTACT
+    ======================= */
+    .page{
+      padding: 120px var(--page-pad-x) 70px;
+      position: relative;
+    }
+
+    .contact-head{
+      text-align:center;
+      padding-top: 10px;
+      margin-bottom: 34px;
+    }
+
+    .contact-title{
+      margin: 0;
+      font-family: "Pain de mie", system-ui;
+      font-weight: 400;
+      font-size: 140px;
+      line-height: .9;
+      color: var(--white);
+      text-shadow: 0 14px 28px rgba(0,0,0,.14);
+    }
+
+    .contact-desc{
+      margin: 10px auto 0;
+      max-width: 70ch;
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(240,239,234,.78);
+    }
+
+    /* Layout 2 colonnes */
+    .contact-grid{
+      margin-top: 40px;
+      display:grid;
+      grid-template-columns: 1.55fr .9fr;
+      gap: 28px;
+      align-items:start;
+    }
+
+    /* Carte formulaire */
+    .panel{
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 38px;
+      padding: 28px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.22);
+    }
+
+    .panel h2{
+      margin: 0 0 6px;
+      font-family: "Outfit", system-ui;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-size: 18px;
+      color: #111;
+    }
+
+    .panel p{
+      margin: 0 0 18px;
+      font-size: 12px;
+      color: rgba(0,0,0,.62);
+      line-height: 1.6;
+    }
+
+    .form{
+      display:grid;
+      gap: 14px;
+    }
+
+    .row-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    label{
+      display:block;
+      font-size: 12px;
+      color: rgba(0,0,0,.78);
+      margin-bottom: 6px;
+    }
+
+    input, textarea{
+      width:100%;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.10);
+      background: rgba(0,0,0,.08);
+      padding: 12px 12px;
+      font-size: 14px;
+      color: #111;
+      outline: none;
+    }
+
+    textarea{
+      min-height: 220px;
+      resize: vertical;
+    }
+
+    .send{
+      margin-top: 6px;
+      width:100%;
+      height: 52px;
+      border-radius: 12px;
+      border: 0;
+      cursor:pointer;
+      background: rgba(58,47,41,.65);
+      color: var(--white);
+      font-weight: 700;
+      letter-spacing:.06em;
+      transition: transform .2s ease, background .2s ease;
+    }
+    .send:hover{
+      transform: translateY(-1px);
+      background: rgba(58,47,41,.78);
+    }
+
+    /* Colonne droite */
+    .side{
+      display:grid;
+      gap: 18px;
+    }
+
+    .photo-box{
+      height: 280px;
+      border-radius: 34px;
+      background: rgba(240,239,234,.90);
+      border: 3px solid rgba(110,59,186,.85); /* contour violet comme sur ton visuel */
+      box-shadow: 0 18px 50px rgba(0,0,0,.18);
+    }
+
+    .mini-card{
+      background: rgba(240,239,234,.90);
+      border: 1px solid rgba(58,47,41,.14);
+      border-radius: 26px;
+      padding: 18px 18px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.12);
+      color: #111;
+    }
+
+    .mini-title{
+      font-weight: 800;
+      letter-spacing:.08em;
+      text-transform: uppercase;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .mini-value{
+      font-size: 12px;
+      letter-spacing:.06em;
+      text-transform: uppercase;
+      color: rgba(0,0,0,.75);
+      line-height: 1.5;
+    }
+
+    .dots{
+      display:flex;
+      gap: 14px;
+      padding-top: 6px;
+    }
+    .dot{
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: rgba(174,176,33,.55);
+      border: 1px solid rgba(58,47,41,.18);
+    }
+
+    /* CTA bas + spirales (comme ton visuel) */
+    .cta{
+      position: relative;
+      text-align:center;
+      padding: 110px 0 70px;
+      margin-top: 40px;
+    }
+
+    .cta h3{
+      margin:0;
+      font-family:"Pain de mie",system-ui;
+      font-weight:400;
+      line-height:.9;
+      font-size: 96px;
+      color: var(--white);
+      text-shadow: 0 14px 28px rgba(0,0,0,.14);
+    }
+
+    .cta .accent{ color: var(--rust); }
+
+    .cta-spiral{
+      position:absolute;
+      bottom: -30px;
+      width: 260px;
+      height: 260px;
+      opacity: .95;
+      pointer-events:none;
+      /* mets tes fichiers quand tu voudras (pour l’instant placeholder) */
+      background: url("assets/spirale-cta.png") center/contain no-repeat;
+    }
+    .cta-spiral--left{ left: -60px; transform: scaleX(-1); }
+    .cta-spiral--right{ right: -60px; }
+
+    /* Footer bar */
+    .endbar{
+      width: 100%;
+      background: rgba(58,47,41,.10);
+      padding: 34px var(--page-pad-x);
+    }
+    .endbar__inner{
+      display:flex;
+      justify-content:flex-end;
+      gap:22px;
+    }
+    .endbar__link{
+      font-weight:700;
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      text-decoration:none;
+      color: rgba(240,239,234,.85);
+    }
+    .endbar__link:hover{ color: var(--white); }
+
+    /* =======================
+       RESPONSIVE
+    ======================= */
+    @media (max-width: 980px){
+      .page{ padding: 110px 6vw 60px; }
+      .contact-title{ font-size: 88px; }
+      .contact-grid{ grid-template-columns: 1fr; }
+      .photo-box{ height: 240px; }
+      .cta h3{ font-size: 78px; }
+    }
+
+    @media (max-width: 850px){
+      .topbar{ display:none; }
+      .menu-toggle{ display:block; }
+    }
+
+    @media (max-width: 560px){
+      .contact-title{ font-size: 70px; }
+      .row-2{ grid-template-columns: 1fr; }
+      .endbar__inner{ justify-content:center; }
+      .cta-spiral{ width: 220px; height: 220px; }
+      .cta-spiral--left{ left: -90px; }
+      .cta-spiral--right{ right: -90px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV FIXE (même que tes autres pages) -->
+  <div class="topbar-wrap">
+    <nav class="topbar" aria-label="Navigation principale">
+      <a class="nav-link" href="home-page.html">Home</a>
+      <a class="nav-link" href="all-projects.html">Projets</a>
+      <a class="nav-link" href="profil.html">Profil</a>
+      <a class="nav-link" href="contact.html">Contact</a>
+    </nav>
+
+    <button class="menu-toggle" id="menuBtn" aria-label="Ouvrir le menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="mobile-menu" id="mobileMenu" aria-label="Menu mobile">
+      <a class="nav-link" href="home-page.html">Home</a>
+      <a class="nav-link" href="all-projects.html">Projets</a>
+      <a class="nav-link" href="profil.html">Profil</a>
+      <a class="nav-link" href="contact.html">Contact</a>
+    </div>
+  </div>
+
+  <main class="page">
+
+    <!-- HEAD -->
+    <header class="contact-head">
+      <h1 class="contact-title">PARLONS-EN !</h1>
+      <p class="contact-desc">
+        Décris-moi ton besoin (UX/UI, branding, direction artistique, etc.) et je reviens vers toi rapidement.
+      </p>
+    </header>
+
+    <!-- GRID -->
+    <section class="contact-grid" aria-label="Contact">
+      <!-- FORM -->
+      <div class="panel" aria-label="Envoyer un message">
+        <h2>Envoyer un message</h2>
+        <p>Remplis le formulaire, je te réponds dès que possible.</p>
+
+        <form class="form" action="#" method="post">
+          <div class="row-2">
+            <div>
+              <label for="lastname">Nom</label>
+              <input id="lastname" name="lastname" type="text" placeholder="Hocbon" />
+            </div>
+            <div>
+              <label for="firstname">Prénom</label>
+              <input id="firstname" name="firstname" type="text" placeholder="Lorette" />
+            </div>
+          </div>
+
+          <div>
+            <label for="email">Mail</label>
+            <input id="email" name="email" type="email" placeholder="lorette@email.com" />
+          </div>
+
+          <div>
+            <label for="message">Demande</label>
+            <textarea id="message" name="message" placeholder="Dis-moi tout : objectifs, délais, budget, etc."></textarea>
+          </div>
+
+          <button class="send" type="submit">Envoyer</button>
+        </form>
+      </div>
+
+      <!-- SIDE -->
+      <aside class="side" aria-label="Infos">
+        <div class="photo-box" aria-label="Photo / illustration"></div>
+
+        <div class="mini-card">
+          <div class="mini-title">Email</div>
+          <div class="mini-value">lorette.hocbon@email.com</div>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-title">Titre</div>
+          <div class="dots" aria-hidden="true">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" aria-label="Call to action">
+      <div class="cta-spiral cta-spiral--left" aria-hidden="true"></div>
+      <div class="cta-spiral cta-spiral--right" aria-hidden="true"></div>
+
+      <h3>ON LANCE LA<br><span class="accent">SYMBIOSE ?</span></h3>
+      <p class="contact-desc" style="margin-top:14px;">Tu peux aussi me contacter via Instagram ou LinkedIn.</p>
+    </section>
+
+  </main>
+
+  <footer class="endbar" aria-label="Liens">
+    <div class="endbar__inner">
+      <a class="endbar__link" href="#" target="_blank" rel="noopener">INSTAGRAM</a>
+      <a class="endbar__link" href="#" target="_blank" rel="noopener">LINKEDIN</a>
+    </div>
+  </footer>
+
+  <script>
+    // Burger menu (identique à tes autres pages)
+    document.getElementById("menuBtn")?.addEventListener("click", () => {
+      document.getElementById("mobileMenu")?.classList.toggle("open");
+    });
+  </script>
+
+</body>
+</html>

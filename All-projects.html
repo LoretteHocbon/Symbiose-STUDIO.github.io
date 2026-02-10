@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Symbiose Studio — All Projects</title>
+  <style>
+
+/* =======================
+   TOKENS (DA)
+======================= */
+:root{
+  --green:#AEB021;
+  --violet:#6E3BBA;
+  --rust:#AE0404;
+  --white:#F0EFEA;
+  --anthracite:#3A2F29;
+
+  --bg: var(--green);
+  --text: var(--white);
+  --nav-text: var(--anthracite);
+
+  /* Glass (nav, CTA, pills) */
+  --glass-bg: rgba(58,47,41,.26);
+  --glass-bg-hover: rgba(58,47,41,.36);
+  --glass-border: rgba(58,47,41,.65);
+  --glass-highlight: rgba(255,255,255,.10);
+  --shadow: rgba(0,0,0,.28);
+
+  /* Cards glass anthracite (léger pour ne pas se mélanger à la nav) */
+  --card-glass-bg: rgba(58,47,41,.18);
+  --card-glass-border: rgba(58,47,41,.35);
+  --card-blur: 6px;
+
+  /* Boutons cards glass violet */
+  --card-btn-bg: rgba(110,59,186,.28);
+  --card-btn-bg-hover: rgba(110,59,186,.26);
+  --card-btn-border: rgba(110,59,186,.60);
+
+  /* Texte cards */
+  --card-title-color: var(--white);
+  --card-sub-color: var(--rust);
+
+  /* Pills filtres */
+  --pill-bg: rgba(240,239,234,.18);
+  --pill-border: rgba(255,255,255,.28);
+  --pill-text: rgba(240,239,234,.92);
+  --pill-active-bg: rgba(58,47,41,.32);
+  --pill-active-border: rgba(58,47,41,.65);
+  --pill-active-text: var(--white);
+
+  /* Layout */
+  --radius: 26px;
+  --gap: 22px;
+}
+
+/* =======================
+   FONTS (optionnel)
+   -> garde uniquement si tu charges les woff2 ici
+======================= */
+@font-face{
+  font-family:"Pain de mie";
+  src:url("fonts/PainDeMie.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Outfit";
+  src:url("fonts/Outfit-Regular.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Outfit";
+  src:url("fonts/Outfit-Bold.woff2") format("woff2");
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+}
+
+/* =======================
+   BASE
+======================= */
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+
+body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Outfit", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  overflow-x:hidden;
+}
+
+/* Rotation */
+@keyframes spin{
+  from{ transform: rotate(0deg); }
+  to{ transform: rotate(360deg); }
+}
+
+/* =========================================================
+   NAVIGATION — BARRE GLASS FIXE
+========================================================= */
+
+.topbar-wrap{
+  position:fixed;
+  top:18px;
+  width:100%;
+
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+
+  z-index:999;
+}
+
+.topbar{
+  display:flex;
+  gap:42px;
+  padding:10px 36px;
+  border-radius:999px;
+
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+
+  box-shadow:
+    0 12px 34px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+
+  backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+}
+
+
+/* =========================================================
+   NAV LINKS
+========================================================= */
+
+.nav-link{
+  text-decoration:none;
+  color: var(--nav-text);
+
+  font-size:16px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+
+  padding:10px 16px;
+  border-radius:999px;
+
+  transition: transform .2s ease, background .2s ease;
+}
+
+.nav-link:hover{
+  background: var(--hover-surface);
+  transform:translateY(-1px);
+  background: rgba(240,239,234,.22); /* blanc DA translucide */
+
+}
+
+
+/* =========================================================
+   MOBILE MENU BUTTON (BURGER)
+========================================================= */
+
+.menu-toggle{
+  display:none;
+
+  width:56px;
+  height:56px;
+  border-radius:999px;
+
+  border:1px solid var(--glass-border);
+  background: var(--glass-bg);
+
+  box-shadow:
+    0 12px 30px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+
+  backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+
+  cursor:pointer;
+
+  position:absolute;
+  left:20px;
+  top:0;
+}
+
+.menu-toggle span{
+  display:block;
+  width:22px;
+  height:2px;
+  margin:5px auto;
+  background: var(--anthracite);
+  transition:.3s;
+}
+
+
+/* =========================================================
+   MOBILE MENU POPUP
+========================================================= */
+
+.mobile-menu{
+  position:absolute;
+  top:96px;
+  left:20px;
+  right:20px;
+  max-width:320px;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+
+  transform:scaleY(0);
+  transform-origin:top;
+  transition:.35s cubic-bezier(.34,1.56,.64,1);
+}
+
+.mobile-menu.open{
+  transform:scaleY(1);
+}
+
+/* Capsules glass seulement en mobile */
+.mobile-menu .nav-link{
+  display:block;
+  width:100%;
+
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+
+  box-shadow:
+    0 12px 30px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+
+  backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+
+  transform:translateY(-10px);
+  opacity:0;
+  transition:.35s;
+}
+
+.mobile-menu.open .nav-link{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.mobile-menu.open .nav-link:nth-child(1){transition-delay:.05s}
+.mobile-menu.open .nav-link:nth-child(2){transition-delay:.12s}
+.mobile-menu.open .nav-link:nth-child(3){transition-delay:.19s}
+
+
+/* =======================
+   PAGE
+======================= */
+.page{
+  padding: 120px 8vw 70px; /* laisse la place à la nav */
+  position: relative;
+}
+
+.header-block{
+  position: relative;
+  text-align:center;
+  padding-top: 24px;
+  margin-bottom: 30px;
+}
+
+/* Spiral rouge au-dessus du titre */
+.header-spiral{
+  width: 440px;
+  height: 440px;
+  margin: 0 auto 14px;
+  background: url("assets/spiral_rust.png") center/contain no-repeat;
+  animation: spin 26s linear infinite;
+  opacity: .95;
+  pointer-events:none;
+  transform: scale(1.8);        /* ← grossit sans pousser le layout */
+  transform-origin: center;
+  margin-bottom: -60px;         /* ← compense l’espace visuel si besoin */
+}
+
+.page-title{
+  margin: 0;
+  font-family: "Pain de mie", system-ui;
+  font-weight: 400;
+  font-size: 180px;
+  line-height: .9;
+  color: var(--white);
+  text-shadow: 0 14px 28px rgba(0,0,0,.14);
+  
+}
+
+.page-desc{
+  margin: 12px auto 0;
+  max-width: 62ch;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(240,239,234,.78);
+  margin-bottom: 60px;
+}
+
+/* Remonte le bloc titre + description pour chevaucher la spirale */
+.page-title,
+.page-desc{
+  position: relative;
+  z-index: 3;
+  transform: translateY(-0px); /* ← ajuste la valeur */
+}
+
+/* =======================
+   FILTRES (pills)
+======================= */
+.filters{
+  display:flex;
+  justify-content:center;
+  gap: 12px;
+  margin: 18px 0 34px;
+  flex-wrap: wrap;
+  margin-bottom: 60px;
+}
+
+.filter-btn{
+  appearance:none;
+  cursor:pointer;
+
+  padding: 7px 14px;
+  border-radius: 999px;
+
+  font-family:"Outfit", system-ui;
+  font-weight:700;
+  font-size: 11px;
+  letter-spacing:.12em;
+  text-transform: uppercase;
+
+  /* GLASS ROUILLE */
+  background: rgba(174,4,4,.22);
+  border: 1px solid rgba(174,4,4,.55);
+  color: #AE0404;
+
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.12),
+    0 6px 16px rgba(0,0,0,.18);
+
+  transition: transform .25s ease, background .25s ease;
+}
+
+.filter-btn:hover{
+  transform: translateY(-1px);
+  background: rgba(174,4,4,.32);
+}
+
+.filter-btn.is-active{
+  background: rgba(174,4,4,.42);
+  border-color: rgba(174,4,4,.85);
+  color: #AE0404;
+}
+
+/* =======================
+   GRID MOSAÏQUE
+======================= */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gap);
+  align-items: stretch;
+  margin-top: 10px;
+  margin-bottom: 90px;
+}
+
+
+/* =======================
+   CARD (glass anthracite)
+======================= */
+.p-card{
+  position: relative;
+  border-radius: var(--radius);
+  overflow:hidden;
+  isolation:isolate;
+
+  background: var(--card-glass-bg);
+  border: 1px solid var(--card-glass-border);
+
+  backdrop-filter: blur(var(--card-blur)) saturate(115%);
+  -webkit-backdrop-filter: blur(var(--card-blur)) saturate(115%);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 10px 24px rgba(0,0,0,.16);
+
+  transition:
+    transform .38s cubic-bezier(.22,.8,.24,1),
+    box-shadow .38s cubic-bezier(.22,.8,.24,1);
+}
+
+.p-card::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  background-image: var(--bg-img);
+  background-size: cover;
+  background-position: center;
+  background-repeat:no-repeat;
+  opacity: var(--img-opacity, .55);
+  z-index:0;
+  pointer-events:none;
+}
+
+/* Hover ressort plus (smooth) */
+.p-card:hover{
+  transform: translateY(-6px) scale(1.015);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 22px 48px rgba(0,0,0,.28);
+}
+
+/* Texte */
+.p-card__content{
+  position:absolute;
+  left: 20px;
+  right: 86px;
+  bottom: 18px;
+  z-index: 2;
+}
+
+.p-card__title{
+  margin:0;
+  font-family:"Pain de mie","Outfit",system-ui;
+  font-weight:400;
+  font-size: 26px;
+  line-height:1;
+  color: var(--card-title-color);
+  text-shadow: 0 14px 28px rgba(0,0,0,.22);
+}
+
+.p-card__sub{
+  margin: 10px 0 0;
+  font-family:"Outfit",system-ui;
+  font-weight:700;
+  font-size: 11px;
+  letter-spacing:.12em;
+  text-transform: uppercase;
+  color: var(--anthracite);
+  text-shadow: 0 14px 28px rgba(0,0,0,.18);
+}
+
+/* =======================
+   BOUTON CARD (glass violet)
+======================= */
+.p-card__btn{
+  position:absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index:3;
+
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+
+  display:grid;
+  place-items:center;
+  text-decoration:none;
+
+  background: var(--card-btn-bg);
+  border: 1px solid var(--card-btn-border);
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.26),
+    inset 0 1px 0 rgba(255,255,255,.16);
+
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+
+  transition: transform .25s ease, background .25s ease;
+}
+
+.p-card__btn:hover{
+  transform: translateY(-2px);
+  background: var(--card-btn-bg-hover);
+}
+
+.p-card__btn svg{
+  width: 20px;
+  height: 20px;
+  stroke: var(--violet);
+}
+
+/* =======================
+   DISPOSITION DES CARTES (mosaïque)
+   -> tu ajustes les spans pour coller au pixel à ton visuel
+======================= */
+.c1 { grid-column: 1 / 8;  min-height: 150px; }
+.c2 { grid-column: 8 / 13; grid-row: span 2; min-height: 330px; }
+.c3 { grid-column: 1 / 4;  min-height: 130px; }
+.c4 { grid-column: 4 / 8;  min-height: 130px; }
+.c5 { grid-column: 1 / 8;  min-height: 160px; }
+.c6 { grid-column: 8 / 13; min-height: 160px; }
+.c7 { grid-column: 1 / 5;  grid-row: span 2; min-height: 330px; }
+.c8 { grid-column: 5 / 13; min-height: 170px; }
+.c9 { grid-column: 5 / 9;  min-height: 140px; }
+.c10{ grid-column: 9 / 13; min-height: 140px; }
+.c11{ grid-column: 1 / 5;  min-height: 160px; }
+.c12{ grid-column: 5 / 13; min-height: 170px; }
+.c13{ grid-column: 1 / 9;  min-height: 160px; }
+.c14{ grid-column: 9 / 13; grid-row: span 2; min-height: 340px; }
+.c15{ grid-column: 1 / 4;  min-height: 140px; }
+
+/* =======================
+   CTA BAS
+======================= */
+.cta{
+  position: relative;
+  text-align:center;
+  padding: 70px 0 30px;
+  margin-top: 10px;
+}
+
+.cta h3{
+  margin:0 0 22px;
+  font-family:"Pain de mie",system-ui;
+  font-weight:400;
+  line-height:.9;
+  font-size: 72px;
+  color: var(--white);
+}
+
+.cta .word--accent{ color: var(--rust); }
+
+.cta__btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 14px 30px;
+  border-radius: 999px;
+
+  background: rgba(58,47,41,.28);
+  border: 1px solid rgba(58,47,41,.65);
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.10);
+
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+
+  color: #000;
+  text-decoration:none;
+
+  font-family:"Outfit",system-ui;
+  font-weight:700;
+  font-size: 11px;
+  letter-spacing:.12em;
+  text-transform: uppercase;
+
+  transition: transform .25s ease, background .25s ease;
+}
+
+.cta__btn:hover{
+  transform: translateY(-2px);
+  background: rgba(58,47,41,.36);
+}
+
+/* Spiral blanche CTA à droite */
+.cta-spiral{
+  position:absolute;
+  right: -140px;
+  bottom: -120px;
+  width: 460px;
+  height: 460px;
+  background: url("assets/spirale-cta.png") center/contain no-repeat;
+  animation: spin 40s linear infinite;
+  opacity: .9;
+  pointer-events:none;
+}
+
+/* =======================
+   FOOTER BAR
+======================= */
+.endbar{
+  margin-top: 70px;
+  width: 100%;
+  background: rgba(58,47,41,.10);
+  padding: 34px 8vw;
+}
+
+.endbar__inner{
+  display:flex;
+  justify-content:flex-end;
+  gap:22px;
+}
+
+.endbar__link{
+  font-family:"Outfit",system-ui;
+  font-weight:700;
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  text-decoration:none;
+  color: rgba(240,239,234,.85);
+}
+
+.endbar__link:hover{ color: var(--white); }
+
+/* =======================
+   RESPONSIVE
+======================= */
+@media (max-width: 980px){
+  .page{ padding: 110px 6vw 60px; }
+  .page-title{ font-size: 72px; }
+
+  .grid{
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .grid > .p-card{
+    grid-column: auto !important;
+    grid-row: auto !important;
+    min-height: 220px !important;
+  }
+
+  .cta h3{ font-size: 62px; }
+
+  .cta-spiral{
+    right: -220px;
+    bottom: -180px;
+    width: 420px;
+    height: 420px;
+  }
+}
+
+@media (max-width: 560px){
+  .page-title{ font-size: 58px; }
+  .page-desc{ font-size: 12px; }
+
+  .topbar{ gap: 22px; padding: 10px 22px; }
+  .nav-link{ font-size: 13px; padding: 10px 12px; }
+
+  .endbar__inner{ justify-content:center; }
+
+  @media (max-width: 850px){
+  .topbar{ display:none; }
+  .menu-toggle{ display:block; }
+
+  .brand h1{ font-size:110px; }
+  .brand .sub{ font-size:30px; }
+}
+}
+
+</style>
+</head>
+
+<!-- =========================================================
+     ALL-PROJECTS — HTML + JS (à coller dans all-projects.html)
+     ⚠️ Ce fichier suppose que tu as déjà collé le CSS complet.
+========================================================= -->
+<body>
+
+    <!-- NAV -->
+    <div class="topbar-wrap">
+      <!-- Desktop nav -->
+      <nav class="topbar" aria-label="Navigation principale">
+        <a class="nav-link" href="Home-page.html">Home</a>
+        <a class="nav-link" href="Profil.html">Profil</a>
+        <a class="nav-link" href="Me-contacter.html">Contact</a>
+      </nav>
+
+      <!-- Mobile burger -->
+      <button class="menu-toggle" id="menuBtn" aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <!-- Mobile popup -->
+      <div class="mobile-menu" id="mobileMenu" aria-label="Menu mobile">
+        <a class="nav-link" href="ho.html">Home</a>
+        <a class="nav-link" href="Profil.html">Profil</a>
+        <a class="nav-link" href="Me-contacter.html">Contact</a>
+      </div>
+    </div>
+
+  <main class="page">
+
+    <!-- HEADER -->
+    <section class="header-block" aria-label="En-tête All Projects">
+      <!-- Spiral rouge au-dessus du titre -->
+      <div class="header-spiral" aria-hidden="true"></div>
+
+      <h1 class="page-title">MES PROJETS</h1>
+
+      <p class="page-desc">
+        Ici tu peux mettre 2–3 lignes d’intro. Tu pourras filtrer par domaines (tout / professionnel / étudiant).
+      </p>
+
+      <!-- FILTRES -->
+      <div class="filters" aria-label="Filtres projets">
+        <button class="filter-btn is-active" data-filter="all" type="button">TOUT</button>
+        <button class="filter-btn" data-filter="pro" type="button">PROFESSIONNEL</button>
+        <button class="filter-btn" data-filter="school" type="button">ÉTUDIANT</button>
+      </div>
+    </section>
+
+    <!-- GRID CARDS (mosaïque) -->
+    <section class="grid" aria-label="Grille des projets">
+
+      <!-- =========================
+           EXEMPLES DE CARTES
+           - data-cat : "pro" ou "school"
+           - style : --bg-img + --img-opacity
+           - classe : c1, c2, c3... pour la disposition
+      ========================= -->
+
+      <article class="p-card c1" data-cat="pro"
+        style="--bg-img:url('assets/projets/a.jpg'); --img-opacity:.60;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">KAIROS</h3>
+          <p class="p-card__sub">PRO · 2025</p>
+        </div>
+        <a class="p-card__btn" href="projet-kairos.html" aria-label="Voir le projet KAIROS">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c2" data-cat="school"
+        style="--bg-img:url('assets/projets/b.jpg'); --img-opacity:.55;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Titre de projet</h3>
+          <p class="p-card__sub">ÉCOLE · 2025</p>
+        </div>
+        <a class="p-card__btn" href="projet-x.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c3" data-cat="school"
+        style="--bg-img:url('assets/projets/c.jpg'); --img-opacity:.60;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Titre de projet</h3>
+          <p class="p-card__sub">ÉCOLE · 2024</p>
+        </div>
+        <a class="p-card__btn" href="projet-x.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c4" data-cat="pro"
+        style="--bg-img:url('assets/projets/d.jpg'); --img-opacity:.55;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Titre de projet</h3>
+          <p class="p-card__sub">PRO · 2024</p>
+        </div>
+        <a class="p-card__btn" href="projet-x.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c5" data-cat="school"
+        style="--bg-img:url('assets/projets/e.jpg'); --img-opacity:.60;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Titre de projet</h3>
+          <p class="p-card__sub">ÉCOLE · 2025</p>
+        </div>
+        <a class="p-card__btn" href="projet-x.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c6" data-cat="pro"
+        style="--bg-img:url('assets/projets/f.jpg'); --img-opacity:.55;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Titre de projet</h3>
+          <p class="p-card__sub">PRO · 2025</p>
+        </div>
+        <a class="p-card__btn" href="projet-x.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c7" data-cat="school"
+        style="--bg-img:url('assets/projets/g.jpg'); --img-opacity:.60;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Titre de projet</h3>
+          <p class="p-card__sub">ÉCOLE · 2023</p>
+        </div>
+        <a class="p-card__btn" href="projet-x.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c8" data-cat="pro"
+        style="--bg-img:url('assets/projets/h.jpg'); --img-opacity:.55;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Titre de projet</h3>
+          <p class="p-card__sub">PRO · 2025</p>
+        </div>
+        <a class="p-card__btn" href="projet-x.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c9" data-cat="school"
+        style="--bg-img:url('assets/projets/i.jpg'); --img-opacity:.60;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Titre de projet</h3>
+          <p class="p-card__sub">ÉCOLE · 2024</p>
+        </div>
+        <a class="p-card__btn" href="projet-x.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c10" data-cat="pro"
+        style="--bg-img:url('assets/projets/j.jpg'); --img-opacity:.55;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Titre de projet</h3>
+          <p class="p-card__sub">PRO · 2024</p>
+        </div>
+        <a class="p-card__btn" href="projet-x.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c11" data-cat="school"
+        style="--bg-img:url('assets/projets/k.jpg'); --img-opacity:.60;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Titre de projet</h3>
+          <p class="p-card__sub">ÉCOLE · 2023</p>
+        </div>
+        <a class="p-card__btn" href="projet-x.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c12" data-cat="pro"
+        style="--bg-img:url('assets/projets/l.jpg'); --img-opacity:.55;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Titre de projet</h3>
+          <p class="p-card__sub">PRO · 2025</p>
+        </div>
+        <a class="p-card__btn" href="projet-x.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c13" data-cat="school"
+        style="--bg-img:url('assets/projets/m.jpg'); --img-opacity:.60;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Titre de projet</h3>
+          <p class="p-card__sub">ÉCOLE · 2022</p>
+        </div>
+        <a class="p-card__btn" href="projet-x.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c14" data-cat="pro"
+        style="--bg-img:url('assets/projets/n.jpg'); --img-opacity:.55;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Titre de projet</h3>
+          <p class="p-card__sub">PRO · 2025</p>
+        </div>
+        <a class="p-card__btn" href="projet-x.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c15" data-cat="school"
+        style="--bg-img:url('assets/projets/o.jpg'); --img-opacity:.60;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Titre de projet</h3>
+          <p class="p-card__sub">ÉCOLE · 2021</p>
+        </div>
+        <a class="p-card__btn" href="projet-x.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" aria-label="Call to action">
+      <div class="cta-spiral" aria-hidden="true"></div>
+      <h3>PRÊT À CRÉER<br><span class="word--accent">ENSEMBLE ?</span></h3>
+      <a class="cta__btn" href="contact.html">DISCUTONS</a>
+    </section>
+
+  </main>
+
+  <footer class="endbar" aria-label="Liens">
+    <div class="endbar__inner">
+      <a class="endbar__link" href="#" target="_blank" rel="noopener">INSTAGRAM</a>
+      <a class="endbar__link" href="#" target="_blank" rel="noopener">LINKEDIN</a>
+    </div>
+  </footer>
+
+  <script>
+    // =========================
+    // FILTRES : TOUT / PRO / ÉTUDIANT
+    // =========================
+    const btns = document.querySelectorAll(".filter-btn");
+    const cards = document.querySelectorAll(".grid .p-card");
+
+    btns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        // Active state
+        btns.forEach(b => b.classList.remove("is-active"));
+        btn.classList.add("is-active");
+
+        // Filter
+        const filter = btn.dataset.filter; // all | pro | school
+
+        cards.forEach(card => {
+          const cat = card.dataset.cat;
+          const show = (filter === "all") || (cat === filter);
+          card.style.display = show ? "" : "none";
+        });
+      });
+    });
+  </script>
+  <script>
+  const menuBtn = document.getElementById("menuBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
+
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener("click", () => {
+      mobileMenu.classList.toggle("open");
+    });
+  } else {
+    console.warn("menuBtn ou mobileMenu introuvable", { menuBtn, mobileMenu });
+  }
+</script>
+
+</body>
