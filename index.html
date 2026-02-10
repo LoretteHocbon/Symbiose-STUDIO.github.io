@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Symbiose Studio — Portfolio</title>
+
+
+<style>
+
+/* =========================================================
+   DESIGN TOKENS / VARIABLES (NOUVELLE DA)
+========================================================= */
+
+:root{
+  /* === PALETTE (tes nouvelles couleurs) === */
+  --green:#AEB021;
+  --violet:#6E3BBA;
+  --rust:#AE0404;
+  --white:#F0EFEA;
+  --anthracite:#3A2F29;
+
+
+  /* === RÔLES UI (pour changer la DA en 2 clics) === */
+  --bg: var(--green);
+  --text: var(--white);
+  --text-soft: rgba(240,239,234,.85);
+  --text-muted: rgba(240,239,234,.70);
+
+  --accent: var(--violet);
+  --accent-2: var(--rust);
+
+
+  /* GLASS SYSTEM — ANTHRACITE DA */
+  --glass-bg: rgba(58,47,41,.30);
+  --glass-bg-hover: rgba(58,47,41,.45);
+  --glass-border: rgba(58,47,41,.70);
+  --glass-highlight: rgba(58,47,41,.35);
+  --glass-text: var(--white); /* texte lisible sur fond foncé */
+  --nav-text: #3A2F29; /* anthracite DA */
+
+  /* Pills / capsules (glass blanc) */
+  --pill-bg: rgba(240,239,234,.20);
+  --pill-border: rgba(255,255,255,.35);
+  --pill-highlight: rgba(255,255,255,.18);
+
+  /* Hover “soft” pour liens */
+  --hover-surface: rgba(240,239,234,.16);
+
+  /* Shadows */
+  --shadow: rgba(0,0,0,.28);
+  --shadow-soft: rgba(0,0,0,.12);
+  --shadow-card: rgba(0,0,0,.10);
+  --shadow-card-hover: rgba(0,0,0,.14);
+  --shadow-text: rgba(0,0,0,.22);
+
+  /* Visual tuning */
+  --rosette-opacity:.85;
+  --card-image-opacity:.75;
+
+  /* Bouton carte (glass vert DA) */
+  --card-btn-bg: rgba(174,176,33,.32);
+  --card-btn-bg-hover: rgba(174,176,33,.46);
+  --card-btn-border: rgba(240,239,234,.45);
+  --card-btn-highlight: rgba(255,255,255,.25);
+
+  
+}
+
+
+/* =========================================================
+   RESET / BASE
+========================================================= */
+
+*{ box-sizing:border-box }
+
+html, body{
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:"Outfit", system-ui;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x:hidden;
+}
+
+
+/* =========================================================
+   ANIMATION — ROTATION CONTINUE (UNE SEULE VERSION)
+========================================================= */
+
+@keyframes spin{
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+
+/* =========================================================
+   HERO LAYOUT
+========================================================= */
+
+.hero{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  position:relative;
+}
+
+
+/* =========================================================
+   ROSACE HERO — FOND TOURNANT
+========================================================= */
+
+.rosette{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  z-index:-1;
+}
+
+.rosette::before{
+  content:"";
+  width:100vw;
+  height:100vh;
+
+  background:url("assets/rosace.png") center/contain no-repeat;
+
+  animation:spin 28s linear infinite;
+  opacity: 0.65 !important;
+}
+
+
+/* =========================================================
+   NAVIGATION — BARRE GLASS FIXE
+========================================================= */
+
+.topbar-wrap{
+  position:fixed;
+  top:18px;
+  width:100%;
+
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+
+  z-index:999;
+}
+
+.topbar{
+  display:flex;
+  gap:42px;
+  padding:10px 36px;
+  border-radius:999px;
+
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+
+  box-shadow:
+    0 12px 34px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+
+  backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+}
+
+
+/* =========================================================
+   NAV LINKS
+========================================================= */
+
+.nav-link{
+  text-decoration:none;
+  color: var(--nav-text);
+
+  font-size:16px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+
+  padding:10px 16px;
+  border-radius:999px;
+
+  transition: transform .2s ease, background .2s ease;
+}
+
+.nav-link:hover{
+  transform: translateY(-1px);
+  background: rgba(240,239,234,.22); /* blanc DA translucide */
+}
+
+/* =========================================================
+   MOBILE MENU BUTTON (BURGER)
+========================================================= */
+
+.menu-toggle{
+  display:none;
+
+  width:56px;
+  height:56px;
+  border-radius:999px;
+
+  border:1px solid var(--glass-border);
+  background: var(--glass-bg);
+
+  box-shadow:
+    0 12px 30px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+
+  backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+
+  cursor:pointer;
+
+  position:absolute;
+  left:20px;
+  top:0;
+}
+
+.menu-toggle span{
+  display:block;
+  width:22px;
+  height:2px;
+  margin:5px auto;
+  background: var(--anthracite);
+  transition:.3s;
+}
+
+
+/* =========================================================
+   MOBILE MENU POPUP
+========================================================= */
+
+.mobile-menu{
+  position:absolute;
+  top:96px;
+  left:20px;
+  right:20px;
+  max-width:320px;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+
+  transform:scaleY(0);
+  transform-origin:top;
+  transition:.35s cubic-bezier(.34,1.56,.64,1);
+}
+
+.mobile-menu.open{
+  transform:scaleY(1);
+}
+
+/* Capsules glass seulement en mobile */
+.mobile-menu .nav-link{
+  display:block;
+  width:100%;
+
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+
+  box-shadow:
+    0 12px 30px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+
+  backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+
+  transform:translateY(-10px);
+  opacity:0;
+  transition:.35s;
+}
+
+.mobile-menu.open .nav-link{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.mobile-menu.open .nav-link:nth-child(1){transition-delay:.05s}
+.mobile-menu.open .nav-link:nth-child(2){transition-delay:.12s}
+.mobile-menu.open .nav-link:nth-child(3){transition-delay:.19s}
+
+
+/* =========================================================
+   BRAND TITLE (SYMBIOSE STUDIO)
+========================================================= */
+
+.brand{
+  display:inline-block;
+  text-align:right;
+}
+
+.brand h1{
+  margin:0;
+  font-size:180px;
+  font-family:"Pain de mie", system-ui;
+  line-height:.9;
+  color: var(--text);
+}
+
+.brand .sub{
+  display:block;
+  margin-top:-10px;
+
+  font-size:45px;
+  font-weight:700;
+  color: var(--rust);
+
+
+}
+
+
+/* =========================================================
+   SCROLL BUTTON HERO
+========================================================= */
+
+.scroll-cta{
+  position:absolute;
+  bottom:34px;
+}
+
+.scroll-btn{
+  width:56px;
+  height:56px;
+  border-radius:999px;
+
+  border:1px solid var(--glass-border);
+  background: var(--glass-bg);
+
+  box-shadow:
+    0 12px 30px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+
+  backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+
+  cursor:pointer;
+}
+
+
+/* =========================================================
+   SECTION PROJETS
+========================================================= */
+
+.projects{
+  position:relative;
+  padding:120px 8vw 90px;
+}
+
+.projects__head{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:48px;
+  align-items:end;
+}
+
+.projects__kicker{
+  display: inline-block;
+
+  padding: 5px 10px;
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+
+  color: var(--anthracite); /* texte reste lisible */
+
+  background: rgba(58,47,41,.35);     /* anthracite */
+  border: 1px solid rgba(58,47,41,.70);
+
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+
+  box-shadow: inset 0 1px 0 rgba(58,47,41,.35);
+}
+
+
+.projects h2{
+  margin:0;
+  font-family:"Pain de mie", system-ui;
+  font-weight:400;
+  line-height:.9;
+  font-size:120px;
+}
+
+/* NOTE: on garde le nom de classe, mais "pink" devient violet */
+.word--white{ color: var(--white); }
+.word--pink{  color: var(--rust); }
+
+.projects__desc{
+  margin:0;
+  max-width:42ch;
+
+  text-align:right;
+  justify-self:end;
+
+  line-height:1.6;
+  font-size:15px;
+  color: var(--text-soft);
+}
+
+
+/* =========================================================
+   SPIRALE DÉCORATIVE — SECTION PROJETS (droite)
+   (L'image est un asset. Si tu changes sa couleur, remplace le fichier.)
+========================================================= */
+
+.spiral{
+  position:absolute;
+  pointer-events:none;
+  opacity:.95;
+}
+
+.spiral--right{
+  right:6vw;
+  top:230px;
+
+  width:160px;
+  aspect-ratio:1;
+
+  background:url("assets/spiral_bordeaux.png") center/contain no-repeat;
+}
+
+
+/* =========================================================
+   CARTES PROJETS — GRID
+========================================================= */
+
+.cards-layout{
+  display:grid;
+  grid-template-columns:repeat(12, 1fr);
+  gap:28px;
+  align-items:stretch;
+  margin-block:72px;
+}
+
+/* Disposition */
+.p-card--a{ grid-column: 1 / 9;  grid-row: 1;     min-height: 220px; }
+.p-card--b{ grid-column: 9 / 13; grid-row: 1;     min-height: 220px; }
+.p-card--c{ grid-column: 1 / 5;  grid-row: 2 / 4; min-height: 520px; }
+.p-card--d{ grid-column: 5 / 13; grid-row: 2;     min-height: 240px; }
+.p-card--e{ grid-column: 5 / 13; grid-row: 3;     min-height: 170px; }
+
+/* Carte */
+.p-card{
+  position: relative;
+  border-radius: 26px;
+  overflow: hidden;
+  isolation: isolate;
+
+  /* === GLASS ANTHRACITE === */
+  background: rgba(58,47,41,.28);
+  border: 1px solid rgba(58,47,41,.55);
+
+  backdrop-filter: blur(6px) saturate(120%);
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 10px 24px rgba(0,0,0,.18);
+
+    will-change: transform;
+    
+  transition:
+  transform .38s cubic-bezier(.22, .8, .24, 1),
+  box-shadow .38s cubic-bezier(.22, .8, .24, 1),
+  background .38s ease;
+}
+
+.p-card::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  background-image: var(--bg-img);
+  background-size: cover;
+  background-position: center;
+  background-repeat:no-repeat;
+
+  opacity: var(--img-opacity, 1);
+  z-index:0;
+  pointer-events:none;
+  border-radius:inherit;
+}
+
+.p-card__content{
+  position:absolute;
+  left:22px;
+  right:88px;
+  bottom:18px;
+  z-index:2;
+}
+
+.p-card__title{
+  margin:0;
+  font-family:"Pain de mie","Outfit",system-ui;
+  font-weight:400;
+  font-size:34px;
+  line-height:1;
+  color: var(--white);
+  text-shadow: 0 14px 28px var(--shadow-text);
+}
+
+.p-card__sub{
+  margin:10px 0 0;
+  font-family:"Outfit",system-ui;
+  font-weight:700;
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color: var(--anthracite);
+
+  text-shadow: 0 14px 28px var(--shadow-text);
+}
+
+.p-card__btn{
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  z-index: 3;
+
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+
+  /* === GLASS VIOLET === */
+  background: rgba(110,59,186,.30);
+  border: 1px solid rgba(110,59,186,.65);
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.18);
+
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+
+  transition: transform .2s ease, background .2s ease;
+}
+
+.p-card__btn:hover{
+  transform: translateY(-2px);
+  background: rgba(110,59,186,.32);
+}
+
+.p-card__btn:active{
+  transform: translateY(0) scale(.98);
+}
+
+.p-card__btn svg{
+  width:20px;
+  height:20px;
+  stroke: var(--violet);
+}
+
+.p-card:hover{
+  transform: translateY(-6px) scale(1.015);
+
+  box-shadow:
+    0 22px 48px rgba(0,0,0,.30),
+    inset 0 1px 0 rgba(255,255,255,.10);
+}
+
+
+/* =========================================================
+   CTA BAS
+========================================================= */
+
+.cta{
+  position:relative;
+  text-align:center;
+  padding:86px 0 30px;
+}
+
+.cta h3{
+  margin:0 0 22px;
+  font-family:"Pain de mie",system-ui;
+  font-weight:400;
+  line-height:.9;
+  font-size:78px;
+}
+
+/* Bouton CTA = même style glass que scroll */
+.cta__btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+
+  padding:14px 28px;
+  border-radius:999px;
+
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+
+  box-shadow:
+    0 12px 30px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+
+  color: var(--anthracite);
+  text-decoration:none;
+
+  font-family:"Outfit",system-ui;
+  font-weight:700;
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+
+  transition: transform .2s ease, background .2s ease;
+}
+
+.cta__btn:hover{
+  transform: translateY(-2px);
+  background: var(--glass-bg-hover);
+}
+.glass-icon{
+  stroke: var(--glass-text);
+}
+
+
+/* =========================================================
+   SPIRALE ALIGNÉE AVEC LE CTA (libre, non enfermée)
+========================================================= */
+
+.spiral-align{
+  position:absolute;
+  left: calc(50% - 50vw - 160px);
+  bottom:-30px;
+
+  width:480px;
+  height:480px;
+
+  background: url("assets/spirale-cta.png") center/contain no-repeat;
+
+  animation: spin 40s linear infinite;
+  opacity:.9;
+
+  pointer-events:none;
+  z-index:0;
+}
+
+
+/* =========================================================
+   FOOTER BAR (END BAR)
+========================================================= */
+
+.endbar{
+  margin-top:70px;
+  width:100%;
+  background: rgba(58,47,41,.10); /* anthracite léger */
+  padding:34px 8vw;
+}
+
+.endbar__inner{
+  display:flex;
+  justify-content:flex-end;
+  gap:22px;
+}
+
+.endbar__link{
+  font-family:"Outfit",system-ui;
+  font-weight:700;
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+
+  text-decoration:none;
+  color: var(--text-muted);
+}
+
+.endbar__link:hover{
+  color: var(--text);
+}
+
+
+/* =========================================================
+   RESPONSIVE — HERO / NAV / PROJETS / CARTES
+========================================================= */
+
+@media (max-width: 980px){
+  .cards-layout{
+    grid-template-columns: 1fr;
+    gap:22px;
+  }
+  .p-card--a,.p-card--b,.p-card--c,.p-card--d,.p-card--e{
+    grid-column:auto;
+    grid-row:auto;
+    min-height:220px;
+  }
+  .p-card--c{ min-height:320px; }
+}
+
+@media (max-width: 900px){
+  .projects__head{
+    grid-template-columns: 1fr;
+    align-items:start;
+  }
+  .projects__desc{
+    text-align:left;
+    justify-self:start;
+    margin-top:16px;
+  }
+  .cta h3{ font-size:66px; }
+}
+
+@media (max-width: 850px){
+  .topbar{ display:none; }
+  .menu-toggle{ display:block; }
+
+  .brand h1{ font-size:110px; }
+  .brand .sub{ font-size:30px; }
+}
+
+@media (max-width: 560px){
+  .brand h1{ font-size:82px; }
+  .brand .sub{ font-size:22px; }
+
+  .endbar__inner{
+    justify-content:center;
+  }
+}
+
+
+</style>
+</head>
+<body>
+  <!-- Spirale libre (fixe écran) -->
+  <div class="spiral-free" aria-hidden="true"></div>
+
+  <!-- =========================
+       HERO
+  ========================== -->
+  <header class="hero">
+    <!-- Rosace tournante -->
+    <div class="rosette" aria-hidden="true"></div>
+
+    <!-- NAV -->
+    <div class="topbar-wrap">
+      <!-- Desktop nav -->
+      <nav class="topbar" aria-label="Navigation principale">
+        <a class="nav-link" href="All-projects.html">Projets</a>
+        <a class="nav-link" href="Profil.html">Profil</a>
+        <a class="nav-link" href="Me-contacter.html">Contact</a>
+      </nav>
+
+      <!-- Mobile burger -->
+      <button class="menu-toggle" id="menuBtn" aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <!-- Mobile popup -->
+      <div class="mobile-menu" id="mobileMenu" aria-label="Menu mobile">
+        <a class="nav-link" href="All-projects.html">Projets</a>
+        <a class="nav-link" href="Profil.html">Profil</a>
+        <a class="nav-link" href="Me-contacter.html">Contact</a>
+      </div>
+    </div>
+
+    <!-- TITLE -->
+    <div class="brand" aria-label="Symbiose Studio">
+      <h1>Symbiose</h1>
+      <div class="sub">Studio</div>
+    </div>
+
+    <!-- SCROLL -->
+    <div class="scroll-cta">
+      <button class="scroll-btn" id="scrollDown" aria-label="Descendre à la section projets">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style="width:26px;height:26px;">
+          <path d="M6 9l6 6 6-6"
+            stroke="#3A2F29" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- =========================
+       MAIN
+  ========================== -->
+  <main>
+    <!-- =========================
+         SECTION PROJETS
+    ========================== -->
+    <section id="projects" class="projects">
+      <div class="spiral-align" aria-hidden="true"></div>
+
+      <!-- Spirale décorative droite (bordeaux) -->
+      <div class="spiral spiral--right"></div>
+
+      <!-- Head (titre + petit texte) -->
+      <div class="projects__head">
+        <div class="projects__title">
+          <div class="projects__kicker">ECOLE / PROFESSIONEL</div>
+
+          <h2>
+            <span class="word--white">MES</span><br/>
+            <span class="word--pink">PROJETS</span>
+          </h2>
+        </div>
+
+        <p class="projects__desc">
+          Ici tu mets ton petit texte (2–4 lignes) pour introduire ta sélection de projets.
+          (UX/UI, branding, expérimentation, etc.)
+        </p>
+      </div>
+
+      <!-- =========================
+           CARTES PROJETS
+      ========================== -->
+      <div class="cards-layout">
+        <!-- A -->
+        <article class="p-card p-card--a" style="--bg-img: url('assets/projets/projet-1.jpg'); --img-opacity: .92;">
+          <div class="p-card__content">
+            <h3 class="p-card__title">Titre de projet</h3>
+            <p class="p-card__sub">École · 2025</p>
+          </div>
+
+          <a class="p-card__btn" href="projets.html" aria-label="Voir le projet">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </article>
+
+        <!-- B -->
+        <article class="p-card p-card--b" style="--bg-img: url('assets/projets/projet-2.jpg'); --img-opacity: .92;">
+          <div class="p-card__content">
+            <h3 class="p-card__title">Titre de projet</h3>
+            <p class="p-card__sub">Branding · 2025</p>
+          </div>
+
+          <a class="p-card__btn" href="projets.html" aria-label="Voir le projet">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </article>
+
+        <!-- C -->
+        <article class="p-card p-card--c" style="--bg-img: url('assets/projets/projet-3.jpg'); --img-opacity: .92;">
+          <div class="p-card__content">
+            <h3 class="p-card__title">Titre de projet</h3>
+            <p class="p-card__sub">UX/UI · 2025</p>
+          </div>
+
+          <a class="p-card__btn" href="projets.html" aria-label="Voir le projet">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </article>
+
+        <!-- D -->
+        <article class="p-card p-card--d" style="--bg-img: url('assets/projets/projet-4.jpg'); --img-opacity: .92;">
+          <div class="p-card__content">
+            <h3 class="p-card__title">Titre de projet</h3>
+            <p class="p-card__sub">Micro-entreprise · 2025</p>
+          </div>
+
+          <a class="p-card__btn" href="projets.html" aria-label="Voir le projet">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </article>
+
+        <!-- E -->
+        <article class="p-card p-card--e" style="--bg-img: url('assets/projets/projet-5.jpg'); --img-opacity: .92;">
+          <div class="p-card__content">
+            <h3 class="p-card__title">Titre de projet</h3>
+            <p class="p-card__sub">Expérimentation · 2025</p>
+          </div>
+
+          <a class="p-card__btn" href="projets.html" aria-label="Voir le projet">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </article>
+      </div>
+
+      <!-- =========================
+           CTA BAS
+      ========================== -->
+      <div class="cta">
+        <h3>
+          <span class="word--white">PRÊT À CRÉER</span><br/>
+          <span class="word--pink">ENSEMBLE ?</span>
+        </h3>
+
+        <a class="cta__btn" href="All-projects.html">VOIR PLUS DE PROJETS</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================
+       FOOTER
+  ========================== -->
+  <footer class="endbar" aria-label="Liens">
+    <div class="endbar__inner">
+      <a class="endbar__link" href="#" target="_blank" rel="noopener">INSTAGRAM</a>
+      <a class="endbar__link" href="#" target="_blank" rel="noopener">LINKEDIN</a>
+    </div>
+  </footer>
+
+  <!-- =========================
+       JS (clean)
+  ========================== -->
+  <script>
+    // Smooth scroll (bouton du hero)
+    document.getElementById("scrollDown")?.addEventListener("click", () => {
+      document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+    });
+
+    // Menu burger
+    document.getElementById("menuBtn")?.addEventListener("click", () => {
+      document.getElementById("mobileMenu")?.classList.toggle("open");
+    });
+
+  </script>
+</body>
+</html>
