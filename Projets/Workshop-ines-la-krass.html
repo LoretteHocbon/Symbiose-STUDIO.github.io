@@ -221,10 +221,10 @@ body{
 
 .workshop-head__spiral{
   position:absolute;
-  top: -8px;
-  width: 170px;
-  height: 170px;
-  background: url("assets/spiral-de-titre.png") center/contain no-repeat;
+  top: -60px;
+  width: 260px;
+  height: 260px;
+  background: url("../assets/spiral-de-titre.png") center/contain no-repeat;
   opacity:.95;
   pointer-events:none;
   animation: spin 26s linear infinite;
@@ -292,7 +292,7 @@ body{
 }
 
 .meta{
-  font-size: 11px;
+  font-size: 18px;
   line-height: 1.6;
   color: rgba(240,239,234,.80);
 
@@ -303,17 +303,19 @@ body{
 
 .meta-row{
   margin: 32px 0;   /* ← plus d’espace entre les blocs */
-  border-left: 3px solid rgba(240,239,234,.85);
+  border-left: 3px solid var(--anthracite);
   padding-left: 18px;
 }
 
 .meta strong{
   display:block;
-  color: rgba(240,239,234,.92);
-  margin-bottom: 8px;
+  color: var(--anthracite);
+  margin-bottom: 4px;
   font-size: 12px;
   letter-spacing: .10em;
   text-transform: uppercase;
+  opacity: 0.55;
+  
 }
 
 .meta .meta-row{ margin: 10px 0; }
@@ -328,7 +330,7 @@ body{
   font-weight: 700;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: rgba(240,239,234,.92);
+  color: var(--anthracite);
   margin: 18px 0 14px;
 }
 
@@ -339,7 +341,7 @@ body{
   height: 18px;
   border-radius: 999px;
 
-  background: var(--white);   /* ou var(--rust) si tu le veux rouge */
+  background: var(--anthracite);   /* ou var(--rust) si tu le veux rouge */
   opacity: .9;
 
   flex-shrink: 0;
@@ -387,7 +389,7 @@ body{
   display:flex;
   gap: 14px;
   flex-wrap: wrap;
-  margin-top: 12px;
+  margin-top: 30px;
 }
 
 .metric{
@@ -402,7 +404,7 @@ body{
 
 .metric__value{
   font-weight: 700;
-  color: rgba(240,239,234,.92);
+  color: var(--violet);
   font-size: 60px;
   font-family: "Pain de mie", system-ui;
   font-weight: 400;
@@ -452,27 +454,27 @@ body{
   place-items:center;
   text-decoration:none;
 
-  background: rgba(174,4,4,.22);
-  border: 1px solid rgba(174,4,4,.55);
+  background: rgba(58,47,41,.35);           /* anthracite */
+  border: 1px solid rgba(58,47,41,.75);
 
   box-shadow:
-    0 12px 30px rgba(0,0,0,.20),
-    inset 0 1px 0 rgba(255,255,255,.12);
+    0 12px 30px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.10);
 
-  backdrop-filter: blur(16px) saturate(150%);
-  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
   transition: transform .25s ease, background .25s ease;
 }
 
 .next__btn:hover{
   transform: translateY(-2px);
-  background: rgba(174,4,4,.30);
+  background: rgba(58,47,41,.50);
 }
 
 .next__btn svg{
   width: 22px;
   height: 22px;
-  stroke: var(--rust);
+  stroke: var(--anthracite);
 }
 
 /* =======================
@@ -482,7 +484,7 @@ body{
   position: relative;
   text-align:center;
   padding: 90px 0 30px;
-  margin-top: 40px;
+  margin-top: 130px;
 }
 
 .cta h3{
@@ -494,7 +496,42 @@ body{
   color: var(--white);
 }
 
-.cta .accent{ color: var(--rust); }
+.cta .accent{ color: var(--violet); }
+
+.cta-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  margin-top: 36px;
+  padding: 14px 28px;
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+
+  color: var(--nav-text);
+
+  border-radius: 999px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+
+  box-shadow:
+    0 14px 32px rgba(0,0,0,.22),
+    inset 0 1px 0 var(--glass-highlight);
+
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+
+  transition: transform .25s ease, background .25s ease;
+}
+
+.cta-btn:hover{
+  transform: translateY(-2px);
+  background: var(--glass-bg-hover);
+}
 
 .cta-spiral{
   position:absolute;
@@ -502,7 +539,7 @@ body{
   bottom: -120px;
   width: 460px;
   height: 460px;
-  background: url("assets/spiralt.png") center/contain no-repeat;
+  background: url("../assets/spiral-de-titre.png") center/contain no-repeat;
   animation: spin 40s linear infinite;
   opacity: .9;
   pointer-events:none;
@@ -568,10 +605,10 @@ body{
   <div class="topbar-wrap">
     <!-- Desktop nav : on met les 4 liens (tu peux ajuster les noms de fichiers) -->
     <nav class="topbar" aria-label="Navigation principale">
-      <a class="nav-link" href="home-page.html">Home</a>
-      <a class="nav-link" href="all-projects.html">Projets</a>
-      <a class="nav-link" href="profil.html">Profil</a>
-      <a class="nav-link" href="contact.html">Contact</a>
+      <a class="nav-link" href="../index.html">Home</a>
+      <a class="nav-link" href="../All-projects.html">Projets</a>
+      <a class="nav-link" href="../Profil.html">Profil</a>
+      <a class="nav-link" href="../Me-contacter.html">Contact</a>
     </nav>
 
     <!-- Mobile burger -->
@@ -581,10 +618,10 @@ body{
 
     <!-- Mobile popup -->
     <div class="mobile-menu" id="mobileMenu" aria-label="Menu mobile">
-      <a class="nav-link" href="home-page.html">Home</a>
-      <a class="nav-link" href="all-projects.html">Projets</a>
-      <a class="nav-link" href="profil.html">Profil</a>
-      <a class="nav-link" href="contact.html">Contact</a>
+      <a class="nav-link" href="../index.html">Home</a>
+      <a class="nav-link" href="../All-projects.html">Projets</a>
+      <a class="nav-link" href="../Profil.html">Profil</a>
+      <a class="nav-link" href="../Me-contacter.html">Contact</a>
     </div>
   </div>
 
@@ -674,28 +711,30 @@ body{
           </p>
         </div>
 
-        <!-- Projet suivant -->
-        <div class="next" aria-label="Projet suivant">
-          <div>
-            <div class="next__kicker">Projet suivant</div>
-            <div class="next__title">KAIROS</div>
-          </div>
+         </section> <!-- fin de .info-grid -->
 
-          <a class="next__btn" href="workshop-kairos.html" aria-label="Aller au projet suivant">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M8 5l8 7-8 7" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        </div>
-
+    <!-- Projet suivant (SECTION À PART, pleine largeur de la page) -->
+    <section class="next" aria-label="Projet suivant">
+      <div>
+        <div class="next__kicker">Projet suivant</div>
+        <div class="next__title">KAIROS</div>
       </div>
+
+      <a class="next__btn" href="workshop-kairos.html" aria-label="Aller au projet suivant">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M8 5l8 7-8 7" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
     </section>
 
     <!-- CTA BAS -->
-    <section class="cta" aria-label="Call to action">
-      <div class="cta-spiral" aria-hidden="true"></div>
-      <h3>PRÊT À CRÉER<br><span class="accent">ENSEMBLE ?</span></h3>
-    </section>
+   <section class="cta" aria-label="Call to action">
+  <div class="cta-spiral" aria-hidden="true"></div>
+
+  <h3>PRÊT À CRÉER<br><span class="accent">ENSEMBLE ?</span></h3>
+
+  <a href="../Profil.html" class="cta-btn">Voir mon profil</a>
+</section>
 
   </main>
 

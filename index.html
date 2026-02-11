@@ -134,26 +134,36 @@ body{
 
 
 /* =========================================================
-   NAVIGATION — BARRE GLASS FIXE
+   NAVIGATION — BARRE GLASS FIXE (icone à gauche / liens à droite)
 ========================================================= */
 
+/* Conteneur centré en haut */
 .topbar-wrap{
-  position:fixed;
-  top:18px;
-  width:100%;
+  position: fixed;
+  top: 18px;
+  left: 0;
+  right: 0;
 
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
+  display: flex;
+  justify-content: center;
+  z-index: 999;
 
-  z-index:999;
+  pointer-events: none; /* comme tes autres pages */
 }
 
+/* La capsule (nav) */
 .topbar{
-  display:flex;
-  gap:42px;
-  padding:10px 36px;
-  border-radius:999px;
+  pointer-events: auto;
+
+  display: flex;
+  align-items: center;
+
+  /* ✅ Barre longue mais contrôlée (sans padding énorme) */
+  width: min(1100px, calc(100vw - 40px));
+
+  /* ✅ Hauteur & “respiration” */
+  padding: 10px 22px;
+  border-radius: 999px;
 
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -162,33 +172,93 @@ body{
     0 12px 34px var(--shadow),
     inset 0 1px 0 var(--glass-highlight);
 
-  backdrop-filter:blur(16px) saturate(140%);
-  -webkit-backdrop-filter:blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
 }
 
+/* Groupe des liens texte à droite */
+.topbar-links{
+  display: flex;
+  align-items: center;
+  gap: 42px;
+  margin-left: auto; /* ✅ pousse tout le texte à droite */
+}
 
 /* =========================================================
-   NAV LINKS
+   LIENS
 ========================================================= */
 
 .nav-link{
-  text-decoration:none;
+  text-decoration: none;
   color: var(--nav-text);
 
-  font-size:16px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
+  font-size: 16px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
 
-  padding:10px 16px;
-  border-radius:999px;
+  padding: 10px 16px;
+  border-radius: 999px;
 
   transition: transform .2s ease, background .2s ease;
 }
 
 .nav-link:hover{
   transform: translateY(-1px);
-  background: rgba(240,239,234,.22); /* blanc DA translucide */
+  background: rgba(240,239,234,.22);
 }
+
+/* =========================================================
+   HOME = ICONE SPIRALE (à gauche)
+========================================================= */
+
+.nav-link--home{
+  width: 42px;
+  height: 42px;
+  padding: 0;
+
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+}
+
+.nav-link--home::before{
+  content:"";
+  width: 40px;
+  height: 40px;
+  background: url("/assets/spiral-menu.png") center/contain no-repeat;
+  opacity: .95;
+  display: block;
+  transition: transform .25s ease, opacity .25s ease;
+}
+
+.nav-link--home:hover::before{
+  transform: rotate(12deg) scale(1.03);
+  opacity: 1;
+}
+
+/* Texte accessible (si tu utilises <span class="sr-only">Home</span>) */
+.sr-only{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================================
+   RESPONSIVE (si tu caches la topbar sur mobile avec ton burger)
+========================================================= */
+
+@media (max-width: 850px){
+  .topbar{ display: none; }
+}
+
+
+
 
 /* =========================================================
    MOBILE MENU BUTTON (BURGER)
@@ -743,13 +813,23 @@ body{
     <div class="rosette" aria-hidden="true"></div>
 
     <!-- NAV -->
-    <div class="topbar-wrap">
-      <!-- Desktop nav -->
-      <nav class="topbar" aria-label="Navigation principale">
-        <a class="nav-link" href="All-projects.html">Projets</a>
-        <a class="nav-link" href="Profil.html">Profil</a>
-        <a class="nav-link" href="Me-contacter.html">Contact</a>
-      </nav>
+   <div class="topbar-wrap">
+  <nav class="topbar" aria-label="Navigation principale">
+
+    <!-- Icône Home à gauche -->
+    <a class="nav-link nav-link--home" href="index.html" aria-label="Home">
+      <span class="sr-only"></span>
+    </a>
+
+    <!-- Liens texte à droite -->
+    <div class="topbar-links">
+      <a class="nav-link" href="All-projects.html">Projets</a>
+      <a class="nav-link" href="Profil.html">Profil</a>
+      <a class="nav-link" href="Me-contacter.html">Contact</a>
+    </div>
+
+  </nav>
+</div>
 
       <!-- Mobile burger -->
       <button class="menu-toggle" id="menuBtn" aria-label="Ouvrir le menu">
@@ -758,6 +838,7 @@ body{
 
       <!-- Mobile popup -->
       <div class="mobile-menu" id="mobileMenu" aria-label="Menu mobile">
+        <a class="nav-link" href="index.html">HOME</a>
         <a class="nav-link" href="All-projects.html">Projets</a>
         <a class="nav-link" href="Profil.html">Profil</a>
         <a class="nav-link" href="Me-contacter.html">Contact</a>
@@ -801,7 +882,7 @@ body{
           <div class="projects__kicker">ECOLE / PROFESSIONEL</div>
 
           <h2>
-            <span class="word--white">MES</span><br/>
+            <span class="word--white">QUELQUES</span><br/>
             <span class="word--pink">PROJETS</span>
           </h2>
         </div>
