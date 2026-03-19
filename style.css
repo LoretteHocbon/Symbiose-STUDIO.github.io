@@ -1,0 +1,262 @@
+/* =========================================================
+   SYMBIOSE STUDIO — DESIGN SYSTEM (style.css)
+   - Typos, couleurs, tokens, glassmorphism, utilitaires
+========================================================= */
+
+/* =======================
+   FONTS
+======================= */
+@font-face{
+  font-family:"Pain de mie";
+  src:url("fonts/PainDeMie.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Outfit";
+  src:url("fonts/Outfit-Regular.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Outfit";
+  src:url("fonts/Outfit-Bold.woff2") format("woff2");
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+}
+
+/* =======================
+   TOKENS — COULEURS
+======================= */
+:root{
+  /* Palette */
+  --cream: #E4DED1;
+  --bordeaux: #220603;
+  --orange-pop: #CA2B02;
+  --red-orange: #EB4930;
+  --orange: #EF853D;
+  --yellow: #F3BC49;
+  --white: #F0EFEA;
+
+  /* Application */
+  --bg: var(--cream);
+  --text: var(--bordeaux);
+  --text-accent: var(--red-orange);
+
+  --card-title: var(--bordeaux);
+  --card-text: var(--orange);
+  --endbar-text: var(--white);
+
+  /* Assets */
+  --rosace-img: url("assets/rosace.png");          /* principale (dégradé) */
+  --nav-spiral-img: url("assets/spiral-menu.png"); /* nav bar (bordeaux) */
+
+  /* =======================
+     TYPO TOKENS
+  ======================= */
+  --ff-title: "Pain de mie", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  --ff-body: "Outfit", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+
+  /* Général */
+  --fs-title-xl: 180px; /* gros titre */
+  --fs-title-lg: 160px; /* moyen titre */
+  --fs-title-md: 140px; /* petit titre */
+
+  --fs-text-xl: 45px;   /* gros texte */
+  --fs-text-md: 20px;   /* moyen texte */
+  --fs-text-sm: 15px;   /* petit texte */
+
+  /* Spécifique */
+  --fs-nav: 16px;
+  --ls-wide: .12em;      /* 12em -> en CSS c’est 0.12em (sinon c’est énorme) */
+
+  --fs-card-title: 34px;
+  --fs-card-text: 12px;
+
+  --fs-btn: 12px;
+  --fs-endbar: 12px;
+
+  /* =======================
+     GLASS SYSTEM
+  ======================= */
+
+  /* Glass blanc (nav / cards / boutons) */
+  --glass-white-bg: rgba(240,239,234,.18);
+  --glass-white-bg-hover: rgba(240,239,234,.26);
+  --glass-white-border: rgba(240,239,234,.35);
+  --glass-white-highlight: rgba(255,255,255,.22);
+  --glass-shadow: rgba(0,0,0,.22);
+
+  /* Glass bouton de carte (orange) */
+  --glass-orange-bg: rgba(239,133,61,.22);
+  --glass-orange-bg-hover: rgba(239,133,61,.34);
+  --glass-orange-border: rgba(239,133,61,.55);
+
+  /* Layout */
+  --radius: 26px;
+  --blur: 16px;
+}
+
+/* =======================
+   RESET / BASE
+======================= */
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+
+body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--ff-body);
+  overflow-x:hidden;
+}
+
+/* =======================
+   TYPO — CLASSES UTILITAIRES
+   (Tu peux les utiliser partout)
+======================= */
+.h1-xl{ font-family: var(--ff-title); font-size: var(--fs-title-xl); line-height:.9; }
+.h1-lg{ font-family: var(--ff-title); font-size: var(--fs-title-lg); line-height:.9; }
+.h1-md{ font-family: var(--ff-title); font-size: var(--fs-title-md); line-height:.9; }
+
+.t-xl{ font-family: var(--ff-body); font-size: var(--fs-text-xl); }
+.t-md{ font-family: var(--ff-body); font-size: var(--fs-text-md); }
+.t-sm{ font-family: var(--ff-body); font-size: var(--fs-text-sm); }
+
+.upper-wide{
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+}
+
+/* =======================
+   NAV TYPO (spécifique)
+======================= */
+.nav-link{
+  font-family: var(--ff-body);
+  font-size: var(--fs-nav);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+}
+
+/* =======================
+   CARD TYPO (spécifique)
+======================= */
+.p-card__title{
+  font-family: var(--ff-title);
+  font-size: var(--fs-card-title);
+  line-height:1;
+  color: var(--card-title);
+}
+
+.p-card__sub{
+  font-family: var(--ff-body);
+  font-size: var(--fs-card-text);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--card-text);
+}
+
+/* =======================
+   BUTTON TYPO (spécifique)
+======================= */
+.btn-text{
+  font-family: var(--ff-body);
+  font-size: var(--fs-btn);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+}
+
+/* =======================
+   ENDBAR TYPO (spécifique)
+======================= */
+.endbar__link{
+  font-family: var(--ff-body);
+  font-size: var(--fs-endbar);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--endbar-text);
+}
+
+/* =======================
+   GLASS — CLASSES
+   (Tu appliques .glass-white sur nav/boutons/cartes)
+======================= */
+.glass-white{
+  background: var(--glass-white-bg);
+  border: 1px solid var(--glass-white-border);
+  box-shadow:
+    0 12px 30px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-white-highlight);
+  backdrop-filter: blur(var(--blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+}
+
+.glass-white:hover{
+  background: var(--glass-white-bg-hover);
+}
+
+/* Glass orange pour le bouton de carte */
+.glass-orange{
+  background: var(--glass-orange-bg);
+  border: 1px solid var(--glass-orange-border);
+  box-shadow:
+    0 12px 30px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-white-highlight);
+  backdrop-filter: blur(var(--blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(160%);
+}
+
+.glass-orange:hover{
+  background: var(--glass-orange-bg-hover);
+}
+
+/* =======================
+   EXEMPLES D’APPLICATION
+   (optionnel : si tu veux que ça s’applique direct)
+======================= */
+/* Nav + boutons glass blanc */
+.topbar,
+.scroll-btn,
+.cta__btn{
+  background: var(--glass-white-bg);
+  border: 1px solid var(--glass-white-border);
+  box-shadow:
+    0 12px 30px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-white-highlight);
+  backdrop-filter: blur(var(--blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(140%);
+}
+
+/* Carte glass blanc */
+.p-card{
+  background: rgba(240,239,234,.12);
+  border: 1px solid rgba(240,239,234,.22);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+}
+
+/* Bouton de carte glass orange */
+.p-card__btn{
+  background: var(--glass-orange-bg);
+  border: 1px solid var(--glass-orange-border);
+  box-shadow:
+    0 12px 30px var(--glass-shadow),
+    inset 0 1px 0 rgba(255,255,255,.18);
+  backdrop-filter: blur(var(--blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(160%);
+}
+
+.p-card__btn:hover{
+  background: var(--glass-orange-bg-hover);
+}
+
+/* Flèche du bouton carte */
+.p-card__btn svg{ stroke: var(--orange); }
+
+/* =======================
+   RESPONSIVE
+   (tu as dit : reste dans index.html pour l’instant)
+======================= */
+/* tu peux déplacer plus tard ici si tu veux */
