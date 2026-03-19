@@ -1,0 +1,1085 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Symbiose Studio — Projet</title>
+
+  <style>
+/* =========================================================
+   DESIGN TOKENS / VARIABLES (DA INDEX — identique)
+   -> conservé tel quel, sans modification
+========================================================= */
+:root{
+  /* Palette */
+  --cream: #E4DED1;
+  --cream-dark: #D1C5AB;
+  --bordeaux: #220603;
+  --orange-pop: #CA2B02;
+  --red-orange: #EB4930;
+  --orange: #EF853D;
+  --yellow: #F3BC49;
+  --white: #F0EFEA;
+
+  /* Rôles */
+  --Fond: var(--cream);
+  --Texte-principal: var(--bordeaux);
+  --Texte-spécifique: var(--red-orange);
+  --Titre-de-carte: var(--bordeaux);
+  --Texte-de-carte: var(--orange);
+  --Texte-endbar: var(--white);
+
+  /* Typo */
+  --ff-title: "Pain de mie", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  --ff-body: "Outfit", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+
+  --text-navbar: 16px;
+  --text-btn: 12px;
+  --text-capsul: 11px;
+  --spacing: .12em;
+
+  /* Glass BLANC (nav) */
+  --glass-bg: rgba(240,239,234,.18);
+  --glass-bg-hover: rgba(240,239,234,.26);
+  --glass-border: rgba(240,239,234,.35);
+  --glass-highlight: rgba(255,255,255,.22);
+  --card-glass-bg: rgba(240,239,234,.14);
+  --card-glass-border: rgba(240,239,234,.22);
+  --card-blur: 10px;
+
+  /* Surfaces projet (blanc un peu plus présent) */
+  --panel-bg: rgba(240,239,234,.18);
+  --panel-border: rgba(240,239,234,.28);
+  --card-glass-bg: rgba(240,239,234,.14);
+  --card-glass-border: rgba(240,239,234,.22);
+  --card-blur: 10px;
+
+  /* Shadow */
+  --shadow: rgba(0,0,0,.22);
+  --shadow-soft: rgba(0,0,0,.14);
+
+  /* Layout */
+  --radius: 26px;
+  --gap: 22px;
+  --page-pad-x: 8vw;
+}
+
+/* =========================================================
+   FONTS
+========================================================= */
+@font-face{
+  font-family:"Pain de mie";
+  src:url("../fonts/PainDeMie.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Outfit";
+  src:url("../fonts/Outfit-Regular.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Outfit";
+  src:url("../fonts/Outfit-Bold.woff2") format("woff2");
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+}
+
+/* =========================================================
+   BASE
+========================================================= */
+*{ box-sizing:border-box; }
+
+html,
+body{
+  margin:0;
+  padding:0;
+}
+
+body{
+  background: var(--Fond);
+  color: var(--Texte-principal);
+  font-family: var(--ff-body);
+  overflow-x:hidden;
+}
+
+.sr-only{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+
+@keyframes spin{
+  from{ transform: rotate(0deg); }
+  to{ transform: rotate(360deg); }
+}
+
+/* =========================================================
+   NAVIGATION DESKTOP
+========================================================= */
+.topbar-wrap{
+  position: fixed;
+  top: 18px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.topbar{
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  width: min(1100px, calc(100vw - 40px));
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 12px 34px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+.topbar-links{
+  display:flex;
+  align-items:center;
+  gap:42px;
+  margin-left:auto;
+}
+
+.nav-link{
+  text-decoration:none;
+  color: var(--bordeaux);
+  font-size: var(--text-navbar);
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  padding: 10px 16px;
+  border-radius: 999px;
+  transition: transform .2s ease, background .2s ease;
+}
+
+.nav-link:hover{
+  transform: translateY(-1px);
+  background: var(--glass-bg-hover);
+}
+
+/* Bouton home en spirale */
+.nav-link--home{
+  width:42px;
+  height:42px;
+  padding:0;
+  display:inline-grid;
+  place-items:center;
+  border-radius:999px;
+}
+
+.nav-link--home::before{
+  content:"";
+  width:40px;
+  height:40px;
+  display:block;
+  opacity:.95;
+  background: url("/assets/spiral-menu.png") center/contain no-repeat;
+  transition: transform .25s ease, opacity .25s ease;
+}
+
+.nav-link--home:hover::before{
+  transform: rotate(12deg) scale(1.03);
+  opacity:1;
+}
+
+/* =========================================================
+   NAVIGATION MOBILE
+========================================================= */
+.mobile-home{
+  display:none;
+  pointer-events:auto;
+  position:fixed;
+  top:18px;
+  left:12px;
+  z-index:2000;
+}
+
+.menu-toggle{
+  pointer-events:auto;
+  display:none;
+  position:fixed;
+  top:18px;
+  right:12px;
+  left:auto;
+  z-index:2000;
+  width:56px;
+  height:56px;
+  border-radius:999px;
+  cursor:pointer;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.22),
+    inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+}
+
+.menu-toggle span{
+  display:block;
+  width:22px;
+  height:2px;
+  margin:5px auto;
+  background: var(--bordeaux);
+  border-radius:2px;
+}
+
+.mobile-menu{
+  pointer-events:auto;
+  position:fixed;
+  top:96px;
+  right:12px;
+  left:auto;
+  width:min(320px, calc(100vw - 24px));
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  transform: scaleY(0);
+  transform-origin: top right;
+  transition: .35s cubic-bezier(.34,1.56,.64,1);
+}
+
+.mobile-menu.open{
+  transform: scaleY(1);
+}
+
+.mobile-menu .nav-link{
+  display:block;
+  width:100%;
+  text-align:right;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 12px 30px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  transform: translateY(-10px);
+  opacity:0;
+  transition:.35s;
+}
+
+.mobile-menu.open .nav-link{
+  transform: translateY(0);
+  opacity:1;
+}
+
+.mobile-menu.open .nav-link:nth-child(1){ transition-delay:.05s; }
+.mobile-menu.open .nav-link:nth-child(2){ transition-delay:.12s; }
+.mobile-menu.open .nav-link:nth-child(3){ transition-delay:.19s; }
+
+/* =========================================================
+   LAYOUT GLOBAL DE PAGE
+========================================================= */
+.page{
+  padding: 120px var(--page-pad-x) 70px;
+  position: relative;
+}
+
+/* =========================================================
+   HEADER PROJET
+   -> même logique que ton nouveau header
+========================================================= */
+.project-header{
+  position: relative;
+  text-align: center;
+  padding: 70px 0 30px;
+  margin-bottom: 34px;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.project-header__spiral{
+  position: absolute;
+  top: -80px;
+  width: 350px;
+  height: 350px;
+  background: url("../assets/rosace.png") center/contain no-repeat;
+  opacity: .95;
+  pointer-events: none;
+  animation: spin 28s linear infinite;
+  z-index: 1;
+}
+
+.project-header__spiral--left{
+  left: -280px;
+}
+
+.project-header__spiral--right{
+  right: -280px;
+  transform: scaleX(-1);
+}
+
+.project-header__inner{
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.project-header__title{
+  margin: 0;
+  font-family: var(--ff-title);
+  font-weight: 400;
+  font-size: 120px;
+  line-height: .9;
+  color: var(--bordeaux);
+  text-shadow: 0 14px 28px var(--shadow-soft);
+  white-space: nowrap;
+  position: relative;
+  z-index: 2;
+}
+
+.project-header__capsule{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: var(--text-capsul);
+  font-weight: 700;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  color: var(--bordeaux);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.18),
+    inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================================================
+   HERO MEDIA
+========================================================= */
+.hero-media{
+  width:100%;
+  aspect-ratio: 21 / 9;
+  overflow:hidden;
+  border-radius: var(--radius);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+}
+
+.hero-media__video{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* =========================================================
+   GRILLE DE CONTENU : COLONNE GAUCHE + COLONNE DROITE
+========================================================= */
+.info-grid{
+  display:grid;
+  grid-template-columns: 260px 1fr;
+  gap:34px;
+  align-items:start;
+  margin-top:26px;
+}
+
+/* =========================================================
+   COLONNE META
+========================================================= */
+.meta{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+  font-size:14px;
+  line-height:1.6;
+  color: rgba(34,6,3,.72);
+}
+
+.meta-row{
+  margin:10px 0;
+  padding-left:18px;
+  border-left: 3px solid var(--orange);
+}
+
+.meta strong{
+  display:block;
+  margin-bottom:4px;
+  color: var(--bordeaux);
+  font-size:12px;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+
+/* Capsules collaborateurs */
+.team{
+  margin-top:12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.team-pill{
+  display:inline-block;
+  width:fit-content;
+  padding:8px 18px;
+  border-radius:999px;
+  font-family: var(--ff-body);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color: var(--cream);
+  background: radial-gradient(circle at 30% 30%, #F3BC49, #EF853D);
+  box-shadow:
+    0 10px 20px rgba(0,0,0,.18),
+    inset 0 4px 10px rgba(255,255,255,.25);
+}
+
+/* =========================================================
+   TITRES ET TEXTES DE SECTION
+========================================================= */
+.section-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:18px 0 14px;
+  font-family: var(--ff-title);
+  font-size:35px;
+  font-weight:400;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color: var(--bordeaux);
+}
+
+.section-title::before{
+  content:"";
+  flex-shrink:0;
+  width:18px;
+  height:18px;
+  border-radius:999px;
+  background: var(--orange);
+  opacity:.9;
+}
+
+.paragraph{
+  margin:0 0 18px;
+  max-width:130ch;
+  font-size:14px;
+  line-height:1.7;
+  color: rgba(34,6,3,.72);
+}
+
+/* =========================================================
+   GRANDE IMAGE UNIQUE SOUS LE TEXTE
+   -> même logique que ton croquis
+========================================================= */
+.visuals{
+  width: 100%;
+  max-width: 100%;
+}
+
+.project-single-media{
+  margin-top: 22px;
+}
+
+.project-single-frame{
+  width: 100%;
+  max-width: 1200px;
+  height: 870px;
+  margin: 0;
+
+  overflow: hidden;
+  border-radius: 0;
+
+  /* repère gris temporaire */
+  background: transparent
+}
+
+.project-single-frame img{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+/* =========================================================
+   SECTION RÉSULTATS
+========================================================= */
+.results{
+  margin-top:10px;
+}
+
+.results-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-top:30px;
+}
+
+.metric{
+  flex: 1 1 160px;
+  min-width:160px;
+  padding:28px 22px;
+  text-align:center;
+  border-radius: var(--radius);
+  background: var(--card-glass-bg);
+  border: 1px solid var(--card-glass-border);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.25),
+    0 10px 24px rgba(0,0,0,.18);
+  backdrop-filter: blur(var(--card-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--card-blur)) saturate(140%);
+}
+
+.metric__value{
+  font-family: var(--ff-title);
+  font-weight:400;
+  font-size:60px;
+  color: var(--orange);
+}
+
+.metric__label{
+  margin-top:4px;
+  font-size:11px;
+  letter-spacing: var(--spacing);
+  text-transform:uppercase;
+  color: rgba(34,6,3,.58);
+}
+
+/* =========================================================
+   PROJET SUIVANT
+========================================================= */
+.next{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  max-width:100%;
+  margin-top:34px;
+  padding-top:20px;
+  text-align:left;
+  border-top: 1px solid var(--orange-pop);
+}
+
+.next__kicker{
+  font-size:12px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color: rgba(34,6,3,.55);
+}
+
+.next__title{
+  margin:6px 0 0;
+  font-family: var(--ff-title);
+  font-size:74px;
+  line-height:.9;
+  color: var(--bordeaux);
+}
+
+.next-circle{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  text-decoration:none;
+  background: radial-gradient(circle at 30% 30%, #F3BC49, #EF853D);
+  box-shadow:
+    0 16px 35px rgba(0,0,0,.25),
+    inset 0 4px 12px rgba(255,255,255,.25);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.next-circle:hover{
+  transform: translateY(-3px) scale(1.05);
+  box-shadow:
+    0 24px 50px rgba(0,0,0,.35),
+    inset 0 4px 12px rgba(255,255,255,.25);
+}
+
+.next-arrow{
+  width:28px;
+  height:28px;
+  color: var(--bordeaux);
+}
+
+/* =========================================================
+   CTA BAS DE PAGE
+========================================================= */
+.cta{
+  position:relative;
+  margin-top:100px;
+  padding:50px 0 20px;
+  text-align:center;
+}
+
+.cta h3{
+  margin:0;
+  font-family: var(--ff-title);
+  font-weight:400;
+  font-size:78px;
+  line-height:.9;
+  color: var(--bordeaux);
+  text-shadow: 0 14px 28px var(--shadow-soft);
+}
+
+.cta .accent{
+  color: var(--orange);
+}
+
+.cta-btn{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  min-width: 180px;
+  min-height: 56px;
+  margin-top: 36px;
+  padding: 6px 6px 6px 18px;
+  border-radius: 999px;
+
+  background: rgba(240,239,234,.34);
+  box-shadow:
+    0 4px 10px rgba(0,0,0,.035),
+    inset 0 1px 0 rgba(255,255,255,.22);
+
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+
+  color: var(--bordeaux);
+  text-decoration: none;
+
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+
+  transition:
+    transform .15s ease,
+    background .15s ease;
+}
+
+.cta-btn:hover{
+  transform: translateY(-1px);
+  background: rgba(240,239,234,.40);
+}
+
+.cta-btn::after{
+  content:"";
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+
+  background: radial-gradient(
+    circle at 30% 30%,
+    #F3BC49 0%,
+    #EF853D 60%,
+    #EB4930 100%
+  );
+
+  box-shadow:
+    0 4px 10px rgba(0,0,0,.06),
+    inset 0 2px 6px rgba(255,255,255,.15);
+}
+
+.cta-btn::before{
+  content:"";
+  position:absolute;
+
+  width: 20px;
+  height: 20px;
+
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 17L17 7' stroke='%23220603' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M10 7h7v7' stroke='%23220603' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cta-spiral{
+  position:absolute;
+  left:-140px;
+  bottom:-120px;
+  width:460px;
+  height:460px;
+  opacity:.9;
+  pointer-events:none;
+  background: url("../assets/rosace.png") center/contain no-repeat;
+  animation: spin 40s linear infinite;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+.endbar{
+  width:100%;
+  margin-top:70px;
+  padding:34px var(--page-pad-x);
+  background: var(--cream-dark);
+}
+
+.endbar__inner{
+  display:flex;
+  justify-content:flex-end;
+  gap:22px;
+}
+
+.endbar__link{
+  font-family: var(--ff-body);
+  font-weight:700;
+  font-size:12px;
+  letter-spacing: var(--spacing);
+  text-transform:uppercase;
+  text-decoration:none;
+  color: var(--white);
+}
+
+.endbar__link:hover{
+  opacity:.85;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+/* Navigation mobile */
+@media (max-width: 850px){
+  .topbar{ display:none; }
+  .menu-toggle{ display:block; }
+  .mobile-home{ display:inline-grid; }
+}
+
+
+
+@media (max-width: 980px){
+  .page{
+    padding: 110px 6vw 60px;
+  }
+
+  .project-header{
+    padding: 50px 0 20px;
+    min-height: 200px;
+    margin-bottom: 24px;
+  }
+
+  .project-header__spiral{
+    width: 220px;
+    height: 220px;
+    top: -40px;
+  }
+
+  .project-header__spiral--left{
+    left: -170px;
+  }
+
+  .project-header__spiral--right{
+    right: -170px;
+  }
+
+  .project-header__title{
+    font-size: 76px;
+  }
+
+  .project-header__capsule{
+    margin-top: 16px;
+  }
+
+  .info-grid{
+    grid-template-columns:1fr;
+  }
+
+  .next__title{
+    font-size:56px;
+  }
+
+  .cta h3{
+    font-size:66px;
+  }
+}
+
+@media (max-width: 1100px){
+  .project-single-frame{
+    max-width: 860px;
+    height: 620px;
+  }
+}
+
+@media (max-width: 760px){
+  .project-single-frame{
+    max-width: 100%;
+    height: 420px;
+  }
+}
+
+@media (max-width: 560px){
+  .project-single-frame{
+    height: 300px;
+  }
+}
+
+
+/* =========================================================
+   OPTION VISUELLE : PAS DE CONTOUR
+========================================================= */
+.topbar,
+.menu-toggle,
+.mobile-menu .nav-link,
+.workshop-subtitle,
+.hero-media,
+.cta-btn{
+  border:none !important;
+}
+  </style>
+
+</head>
+
+<body>
+
+  <!-- =====================================================
+       NAVIGATION
+  ====================================================== -->
+  <div class="topbar-wrap">
+
+    <!-- Navigation desktop -->
+    <nav class="topbar" aria-label="Navigation principale">
+      <a class="nav-link nav-link--home" href="../index.html" aria-label="Home">
+        <span class="sr-only">Home</span>
+      </a>
+
+      <div class="topbar-links">
+        <a class="nav-link" href="../All-projects.html">Projets</a>
+        <a class="nav-link" href="../Profil.html">Profil</a>
+        <a class="nav-link" href="../Me-contacter.html">Contact</a>
+      </div>
+    </nav>
+
+    <!-- Home mobile -->
+    <a class="mobile-home nav-link--home" href="../index.html" aria-label="Home">
+      <span class="sr-only">Home</span>
+    </a>
+
+    <!-- Bouton burger mobile -->
+    <button class="menu-toggle" id="menuBtn" aria-label="Ouvrir le menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Menu mobile -->
+    <div class="mobile-menu" id="mobileMenu" aria-label="Menu mobile">
+      <a class="nav-link" href="../All-projects.html">Projets</a>
+      <a class="nav-link" href="../Profil.html">Profil</a>
+      <a class="nav-link" href="../Me-contacter.html">Contact</a>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       CONTENU PRINCIPAL
+  ====================================================== -->
+  <main class="page">
+
+    <!-- ===================================================
+         HEADER PROJET
+    ==================================================== -->
+<section class="project-header" aria-label="En-tête du projet">
+  <div class="project-header__spiral project-header__spiral--left" aria-hidden="true"></div>
+  <div class="project-header__spiral project-header__spiral--right" aria-hidden="true"></div>
+
+  <div class="project-header__inner">
+    <h1 class="project-header__title">BIN'GO</h1>
+    <p class="project-header__capsule">Projet / ECOLE — 2026</p>
+  </div>
+</section>
+
+    <!-- ===================================================
+         HERO VIDEO (a changé entre video et image)
+    ==================================================== -->
+    <section class="hero-media" aria-label="Vidéo principale du projet">
+      <video class="hero-media__video" autoplay muted loop playsinline>
+        <source src="../Projets/bin'go-couv.mp4" type="video/mp4">
+        Votre navigateur ne supporte pas la lecture vidéo.
+      </video>
+    </section>
+
+    <!-- ===================================================
+         GRILLE CONTENU
+         - gauche : infos projet
+         - droite : texte + galerie + résultats
+    ==================================================== -->
+    <section class="info-grid" aria-label="Contenu du projet">
+
+      <!-- ===============================================
+           META PROJET
+      ================================================ -->
+      <aside class="meta" aria-label="Infos projet">
+        <div class="meta-row">
+          <strong>Durée</strong>
+          Janvier 2025 - Juin 2026
+        </div>
+
+        <div class="meta-row">
+          <strong>Catégorie</strong>
+          Design de service
+        </div>
+
+        <div class="meta-row">
+          <strong>Outils</strong>
+          Figma
+        </div>
+
+        <div class="meta-row">
+          <strong>Rôle</strong>
+          DA-Product design
+        </div>
+
+        <div class="team" aria-label="Collaboratrices">
+          <span class="team-pill">Basile Parfait</span>
+          <span class="team-pill">Lila Ouisse</span>
+        </div>
+      </aside>
+
+      <!-- ===============================================
+           CONTENU ÉDITORIAL
+      ================================================ -->
+      <div>
+
+        <!-- Brief -->
+        <div class="section-title">Brief</div>
+        <p class="paragraph">
+         Concevoir un service en partant de mots tirés au sort, en s’appuyant sur la méthode du double diamant pour structurer les phases d’exploration, de définition et de développement.
+        </p>
+
+        <!-- Solution -->
+        <div class="section-title">Notre solution</div>
+        <p class="paragraph">
+           Le projet propose un service de collecte mobile associé à une application permettant aux habitants de signaler et déposer leurs déchets spécifiques. Des services municipaux assurent ensuite la collecte directement en ville, facilitant ainsi le tri et l’accès aux filières de recyclage.
+        </p>
+
+        <!-- Galerie projet -->
+      
+ <div class="visuals" aria-label="Image du projet">
+  <div class="project-single-media">
+    <figure class="project-single-frame">
+      <img src="../Projets/bin'go.png" alt="Visuel principal du projet Iness la Krass">
+    </figure>
+  </div>
+</div>
+
+        <!-- Résultats -->
+        <div class="results">
+          <div class="section-title">Résultat</div>
+
+          <p class="paragraph">
+             Le projet aboutit à un service urbain simple et accessible qui facilite le tri des déchets spécifiques et encourage des pratiques plus responsables au quotidien.
+          </p>
+
+          <div class="results-row">
+            <div class="metric">
+              <div class="metric__value">05</div>
+              <div class="metric__label">types de déchets collectés</div>
+            </div>
+
+            <div class="metric">
+              <div class="metric__value">01</div>
+              <div class="metric__label">application mobile</div>
+            </div>
+
+            <div class="metric">
+              <div class="metric__value">15Kg</div>
+              <div class="metric__label">maximum par collecte</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================================================
+         PROJET SUIVANT
+    ==================================================== -->
+    <section class="next" aria-label="Projet suivant">
+      <div>
+        <div class="next__kicker">Projet suivant</div>
+        <div class="next__title">Sherlock Holmes</div>
+      </div>
+
+      <a href="sherlock holmes.html" class="next-circle" aria-label="Aller au projet suivant">
+        <svg class="next-arrow" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M8 5l8 7-8 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </section>
+
+    <!-- ===================================================
+         CTA FINAL
+    ==================================================== -->
+    <section class="cta" aria-label="Call to action">
+      <div class="cta-spiral" aria-hidden="true"></div>
+      <h3>PRÊT À CRÉER<br><span class="accent">ENSEMBLE ?</span></h3>
+      <a href="../Profil.html" class="cta-btn">Voir mon profil</a>
+    </section>
+
+  </main>
+
+  <!-- =====================================================
+       FOOTER
+  ====================================================== -->
+<footer class="endbar" aria-label="Liens">
+  <div class="endbar__inner">
+    <a class="endbar__link" href="https://www.instagram.com/symbiose_studi0/" target="_blank" rel="noopener">INSTAGRAM</a>
+    <a class="endbar__link" href="https://www.linkedin.com/feed/" target="_blank" rel="noopener">LINKEDIN</a>
+  </div>
+</footer>
+
+  <script>
+    /* =====================================================
+       MENU BURGER MOBILE
+       -> ouvre / ferme le menu popup sur petit écran
+    ====================================================== */
+    const menuBtn = document.getElementById("menuBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
+
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("open");
+      });
+    }
+  </script>
+
+</body>
+</html>

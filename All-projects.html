@@ -1,0 +1,1233 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Symbiose Studio — All Projects</title>
+  <style>
+
+/* =======================
+   TOKENS (DA — même logique que INDEX)
+======================= */
+:root{
+  /* Palette */
+  --cream: #E4DED1;
+  --cream-dark: #D1C5AB;
+  --bordeaux: #220603;
+  --orange-pop: #CA2B02;
+  --red-orange: #EB4930;
+  --orange: #EF853D;
+  --yellow: #F3BC49;
+  --white: #F0EFEA;
+
+  /* Rôles */
+  --Fond: var(--cream);
+  --Texte-principal: var(--bordeaux);
+  --Texte-spécifique: var(--red-orange);
+  --Titre-de-carte: var(--bordeaux);
+  --Texte-de-carte: var(--orange);
+  --Texte-endbar: var(--white);
+
+  /* Typo */
+  --ff-title: "Pain de mie", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  --ff-body: "Outfit", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+
+  --title-xl: 180px;
+  --title-md: 140px;
+  --title-xs: 100px;
+
+  --text-navbar: 16px;
+  --text-capsul: 10px;
+  --text-btn: 12px;
+  --text-endbar: 12px;
+
+  --card-title: 34px;
+  --card-text: 13px;
+
+  --spacing: .12em;
+  --ls-wide: var(--spacing);
+
+  /* Glass BLANC (nav / boutons / capsules) */
+  --glass-bg: rgba(240,239,234,.18);
+  --glass-bg-hover: rgba(240,239,234,.26);
+  --glass-border: rgba(240,239,234,.35);
+  --glass-highlight: rgba(255,255,255,.22);
+
+  /* Ombres */
+  --shadow: rgba(0,0,0,.22);
+  --shadow-soft: rgba(0,0,0,.14);
+
+  /* Cards glass blanc */
+  --card-glass-bg: rgba(240,239,234,.14);
+  --card-glass-border: rgba(240,239,234,.22);
+  --card-blur: 10px;
+
+  /* Bouton card glass ORANGE */
+  --card-btn-bg: rgba(239,133,61,.22);
+  --card-btn-bg-hover: rgba(239,133,61,.34);
+  --card-btn-border: rgba(239,133,61,.55);
+
+  /* Pills filtres */
+  --pill-bg: rgba(240,239,234,.18);
+  --pill-border: rgba(240,239,234,.35);
+  --pill-text: var(--bordeaux);
+
+  --pill-active-bg: rgba(34,6,3,.12);
+  --pill-active-border: rgba(34,6,3,.28);
+  --pill-active-text: var(--bordeaux);
+
+  /* Layout */
+  --radius: 26px;
+  --gap: 22px;
+}
+
+/* =======================
+   FONTS
+======================= */
+@font-face{
+  font-family:"Pain de mie";
+  src:url("fonts/PainDeMie.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Outfit";
+  src:url("fonts/Outfit-Regular.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Outfit";
+  src:url("fonts/Outfit-Bold.woff2") format("woff2");
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+}
+
+/* =======================
+   BASE
+======================= */
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+
+body{
+  background: var(--Fond);
+  color: var(--Texte-principal);
+  font-family: var(--ff-body);
+  overflow-x:hidden;
+}
+
+@keyframes spin{
+  from{ transform: rotate(0deg); }
+  to{ transform: rotate(360deg); }
+}
+
+/* =========================================================
+   NAVIGATION — identique INDEX (clean)
+========================================================= */
+.topbar-wrap{
+  position: fixed;
+  top: 18px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 999;
+  pointer-events: none;
+}
+
+/* Desktop nav capsule */
+.topbar{
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+
+  width: min(1100px, calc(100vw - 40px));
+  padding: 10px 22px;
+  border-radius: 999px;
+
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+
+  box-shadow:
+    0 12px 34px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+.topbar-links{
+  display: flex;
+  align-items: center;
+  gap: 42px;
+  margin-left: auto;
+}
+
+.nav-link{
+  text-decoration: none;
+  color: var(--bordeaux);
+
+  font-size: var(--text-navbar);
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+
+  padding: 10px 16px;
+  border-radius: 999px;
+
+  transition: transform .2s ease, background .2s ease;
+}
+
+.nav-link:hover{
+  transform: translateY(-1px);
+  background: var(--glass-bg-hover);
+}
+
+/* Home spirale */
+.nav-link--home{
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+}
+
+.nav-link--home::before{
+  content:"";
+  width: 40px;
+  height: 40px;
+  background: url("/assets/spiral-menu.png") center/contain no-repeat;
+  opacity: .95;
+  display: block;
+  transition: transform .25s ease, opacity .25s ease;
+}
+
+.nav-link--home:hover::before{
+  transform: rotate(12deg) scale(1.03);
+  opacity: 1;
+}
+
+/* Accessibilité */
+.sr-only{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Mobile home */
+.mobile-home{
+  display: none;
+  pointer-events: auto;
+  position: fixed;
+  top: 18px;
+  left: 12px;
+  z-index: 2000;
+}
+
+/* Burger */
+.menu-toggle{
+  pointer-events: auto;
+  display: none;
+
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+
+  box-shadow:
+    0 12px 30px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+
+  cursor: pointer;
+
+  position: fixed;
+  top: 18px;
+  right: 12px;
+  left: auto;
+  z-index: 2000;
+}
+
+.menu-toggle span{
+  display: block;
+  width: 22px;
+  height: 2px;
+  margin: 5px auto;
+  background: var(--bordeaux);
+  border-radius: 2px;
+}
+
+/* Mobile menu popup */
+.mobile-menu{
+  pointer-events: auto;
+  position: fixed;
+  top: 96px;
+  right: 12px;
+  left: auto;
+
+  width: min(320px, calc(100vw - 24px));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  transform: scaleY(0);
+  transform-origin: top right;
+  transition: .35s cubic-bezier(.34,1.56,.64,1);
+}
+
+.mobile-menu.open{ transform: scaleY(1); }
+
+.mobile-menu .nav-link{
+  display: block;
+  width: 100%;
+  text-align: right;
+
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+
+  box-shadow:
+    0 12px 30px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+
+  transform: translateY(-10px);
+  opacity: 0;
+  transition: .35s;
+}
+
+.mobile-menu.open .nav-link{
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.mobile-menu.open .nav-link:nth-child(1){transition-delay:.05s}
+.mobile-menu.open .nav-link:nth-child(2){transition-delay:.12s}
+.mobile-menu.open .nav-link:nth-child(3){transition-delay:.19s}
+
+@media (max-width: 850px){
+  .topbar{ display: none; }
+  .menu-toggle{ display: block; }
+  .mobile-home{ display: inline-grid; }
+}
+
+/* =======================
+   PAGE
+======================= */
+.page{
+  padding: 120px 8vw 70px;
+  position: relative;
+}
+
+.header-block{
+  position: relative;
+  text-align: center;
+  padding-top: 24px;
+  margin-bottom: 30px;
+}
+
+/* Spirales header */
+.header-block::before,
+.header-block::after{
+  content:"";
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  background: url("assets/rosace.png") center/contain no-repeat;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .95;
+}
+
+.header-block::before{
+  left: -20%;
+  top: -5%;
+  animation: spinLeft 40s linear infinite;
+}
+.header-block::after{
+  right: -20%;
+  top: -5%;
+  transform: scaleX(-1);
+  animation: spinRight 40s linear infinite;
+}
+
+@keyframes spinLeft{
+  from{ transform: rotate(0deg); }
+  to{ transform: rotate(360deg); }
+}
+@keyframes spinRight{
+  from{ transform: rotate(0deg) scaleX(-1); }
+  to{ transform: rotate(-360deg) scaleX(-1); }
+}
+
+.page-title{
+  margin: 0;
+  font-family: var(--ff-title);
+  font-weight: 400;
+  font-size: var(--title-xl);
+  line-height: .9;
+  color: var(--bordeaux);
+  text-shadow: 0 14px 28px var(--shadow-soft);
+  position: relative;
+  z-index: 3;
+}
+
+.page-desc{
+  margin: 12px auto 60px;
+  max-width: 62ch;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(34,6,3,.72);
+  position: relative;
+  z-index: 3;
+}
+
+/* =======================
+   FILTRES (pills)
+======================= */
+.filters{
+  display:flex;
+  justify-content:center;
+  gap: 12px;
+  margin: 18px 0 60px;
+  flex-wrap: wrap;
+}
+
+.filter-btn{
+  appearance:none;
+  cursor:pointer;
+
+  padding: 7px 14px;
+  border-radius: 999px;
+
+  font-family: var(--ff-body);
+  font-weight: 700;
+  font-size: var(--text-capsul);
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+
+  background: var(--pill-bg);
+  border: 1px solid var(--pill-border);
+  color: var(--pill-text);
+
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.12),
+    0 6px 16px rgba(0,0,0,.10);
+
+  transition: transform .25s ease, background .25s ease;
+}
+
+.filter-btn:hover{
+  transform: translateY(-1px);
+  background: var(--glass-bg-hover);
+}
+
+.filter-btn.is-active{
+  background: var(--pill-active-bg);
+  border-color: var(--pill-active-border);
+  color: var(--pill-active-text);
+}
+
+/* =======================
+   GRID MOSAÏQUE
+======================= */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gap);
+  align-items: stretch;
+  grid-auto-rows: 160px;
+  margin-top: 10px;
+  margin-bottom: 90px;
+}
+
+/* =======================
+   CARD (glass blanc) + IMAGE (simple, sans peinture)
+======================= */
+/* =======================
+   CARD — EXACT INDEX (adapté à All-projects)
+   ✅ pas de peinture / pas de N&B
+======================= */
+
+/* Carte */
+.p-card{
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  isolation: isolate;
+
+  background: var(--card-glass-bg);
+  border: 1px solid var(--card-glass-border);
+
+  backdrop-filter: blur(var(--card-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--card-blur)) saturate(140%);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.25),
+    0 10px 24px rgba(0,0,0,.25);
+
+  will-change: transform;
+  transition:
+    transform .38s cubic-bezier(.22,.8,.24,1),
+    box-shadow .38s cubic-bezier(.22,.8,.24,1),
+    background .38s ease;
+}
+
+/* ✅ Image : on garde ton système de variables All-projects ( --card-img ) */
+.p-card::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  background-image: var(--card-img);
+  background-size: var(--img-size, cover);
+  background-position: var(--img-pos, center);
+  background-repeat:no-repeat;
+  opacity: var(--img-opacity, 1);
+  z-index:0;
+  pointer-events:none;
+  border-radius:inherit;
+}
+
+.grid.is-filtered .p-card::before{
+  background-size: var(--img-size-filtered, var(--img-size, cover));
+  background-position: var(--img-pos-filtered, var(--img-pos, center));
+}
+
+.p-card__content{
+  position:absolute;
+  left:22px;
+  right:88px;
+  bottom:18px;
+  z-index:2;
+}
+
+.p-card__title{
+  margin:0;
+  font-family: var(--ff-title);
+  font-weight:400;
+  font-size: var(--card-title);
+  line-height:1;
+  color: var(--Titre-de-carte);
+  text-shadow: 0 14px 28px rgba(0,0,0,.22); /* ton index a --shadow-text, ici on met une valeur sûre */
+}
+
+.p-card__sub{
+  margin:10px 0 0;
+  font-family: var(--ff-body);
+  font-weight:700;
+  font-size: var(--card-text);
+  letter-spacing: var(--spacing); /* équivalent de ton ls-wide dans cette page */
+  text-transform: uppercase;
+  color: var(--Texte-de-carte);
+  text-shadow: 0 14px 28px rgba(0,0,0,.22);
+}
+
+/* Bouton carte (glass orange) */
+.p-card__btn{
+  position:absolute;
+  right:18px;
+  bottom:18px;
+  z-index:3;
+
+  width:56px;
+  height:56px;
+  border-radius:999px;
+
+  display:grid;
+  place-items:center;
+  text-decoration:none;
+
+  background: radial-gradient(
+    circle at 30% 30%,
+    #F3BC49 0%,
+    #EF853D 60%,
+    #EB4930 100%
+  );
+
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.18),
+    inset 0 4px 10px rgba(255,255,255,.15),
+    inset 0 -8px 16px rgba(0,0,0,.08);
+
+  border: none;
+
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.p-card__btn:hover{
+  transform: translateY(-2px) scale(1.04);
+  box-shadow:
+    0 16px 30px rgba(0,0,0,.22),
+    inset 0 6px 14px rgba(255,255,255,.18),
+    inset 0 -10px 18px rgba(0,0,0,.10);
+}
+
+.p-card__btn:active{
+  transform: scale(.96);
+}
+
+.p-card__btn svg{
+  width:20px;
+  height:20px;
+  stroke: var(--bordeaux);
+}
+
+/* Hover carte */
+.p-card:hover{
+  transform: translateY(-6px) scale(1.015);
+  box-shadow:
+    0 22px 48px rgba(0,0,0,.30),
+    inset 0 1px 0 rgba(255,255,255,.10);
+}
+
+/* =======================
+   DISPOSITION MOSAÏQUE
+======================= */
+.c1{ grid-column: 1 / 9;  grid-row: 1 / span 1; }
+.c2{ grid-column: 9 / 13; grid-row: 1 / span 2; }
+.c3{ grid-column: 1 / 5;  grid-row: 2 / span 2; }
+.c4{ grid-column: 5 / 9;  grid-row: 2 / span 2; }
+.c5{ grid-column: 9 / 13; grid-row: 3 / span 1; }
+
+.c6{ grid-column: 1 / 8;  grid-row: 4 / span 2; }
+.c7{ grid-column: 8 / 13; grid-row: 4 / span 2; }
+
+.c8{  grid-column: 1 / 7;  grid-row: 6 / span 3; }
+.c9{  grid-column: 7 / 10; grid-row: 6 / span 3; }
+.c10{ grid-column: 10 / 13;grid-row: 6 / span 3; }
+
+.c11{ grid-column: 1 / 7;  grid-row: 9 / span 3; }
+.c12{ grid-column: 7 / 13; grid-row: 9 / span 3; }
+
+.c13{ grid-column: 1 / 4;  grid-row: 12 / span 2; }
+.c14{ grid-column: 4 / 7;  grid-row: 12 / span 2; }
+.c15{ grid-column: 7 / 13; grid-row: 12 / span 2; }
+
+/* =======================
+   MODE FILTRÉ : grille propre
+   (utilisé pour PRO / ÉTUDIANT)
+======================= */
+.grid.is-filtered{
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(240px, auto);
+}
+
+.grid.is-filtered > .p-card{
+  grid-column: auto !important;
+  grid-row: auto !important;
+  min-height: 260px;
+}
+
+@media (max-width: 980px){
+  .grid.is-filtered{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid.is-filtered > .p-card{
+    min-height: 220px;
+  }
+}
+
+@media (max-width: 640px){
+  .grid.is-filtered{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =======================
+   CTA BAS
+======================= */
+.cta{
+  position: relative;
+  text-align:center;
+  padding: 70px 0 30px;
+  margin-top: 10px;
+}
+
+.cta h3{
+  margin:0 0 22px;
+  font-family: var(--ff-title);
+  font-weight:400;
+  line-height:.9;
+  font-size: 72px;
+  color: var(--bordeaux);
+}
+
+.cta .word--accent{ color: var(--orange); }
+
+.cta__btn{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  min-width: 100px;
+  min-height: 56px;
+  padding: 6px 6px 6px 18px;
+  border-radius: 999px;
+
+  background: rgba(240,239,234,.34);
+  box-shadow:
+    0 4px 10px rgba(0,0,0,.035),
+    inset 0 1px 0 rgba(255,255,255,.22);
+
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+
+  color: var(--bordeaux);
+  text-decoration: none;
+
+  font-family: var(--ff-body);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1;
+
+  transition:
+    transform .15s ease,
+    background .15s ease;
+}
+
+.cta__btn:hover{
+  transform: translateY(-1px);
+  background: rgba(240,239,234,.40);
+}
+
+.cta__btn::after{
+  content:"";
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+
+  background: radial-gradient(
+    circle at 30% 30%,
+    #F3BC49 0%,
+    #EF853D 60%,
+    #EB4930 100%
+  );
+
+  box-shadow:
+    0 4px 10px rgba(0,0,0,.06),
+    inset 0 2px 6px rgba(255,255,255,.15);
+}
+
+.cta__btn::before{
+  content:"";
+  position:absolute;
+
+  width: 20px;
+  height: 20px;
+
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 17L17 7' stroke='%23220603' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M10 7h7v7' stroke='%23220603' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cta-spiral{
+  position:absolute;
+  right: -140px;
+  bottom: -120px;
+  width: 460px;
+  height: 460px;
+  background: url("assets/rosace.png") center/contain no-repeat;
+  animation: spin 40s linear infinite;
+  opacity: .9;
+  pointer-events:none;
+}
+
+/* =======================
+   FOOTER BAR
+======================= */
+.endbar{
+  margin-top: 70px;
+  width: 100%;
+  background: var(--cream-dark);
+  padding: 34px 8vw;
+}
+
+.endbar__inner{
+  display:flex;
+  justify-content:flex-end;
+  gap:22px;
+}
+
+.endbar__link{
+  font-family: var(--ff-body);
+  font-weight:700;
+  font-size: var(--text-endbar);
+  letter-spacing: var(--spacing);
+  text-transform:uppercase;
+  text-decoration:none;
+  color: var(--Texte-endbar);
+}
+
+.endbar__link:hover{ opacity:.85; }
+
+/* =======================
+   RESPONSIVE
+======================= */
+@media (max-width: 980px){
+  .page{ padding: 110px 6vw 60px; }
+  .page-title{ font-size: 72px; }
+
+  .grid{
+    grid-template-columns: 1fr;
+    gap: 22px;
+    grid-auto-rows: auto;
+  }
+
+  .grid > .p-card{
+    grid-column: auto !important;
+    grid-row: auto !important;
+    min-height: 220px !important;
+  }
+
+  .c3,
+  .c8,
+  .c9,
+  .c10,
+  .c11,
+  .c12{
+    min-height: 320px !important;
+  }
+
+  .cta h3{ font-size: 62px; }
+
+  .cta-spiral{
+    right: -220px;
+    bottom: -180px;
+    width: 420px;
+    height: 420px;
+  }
+}
+
+@media (max-width: 560px){
+  .page-title{ font-size: 58px; }
+  .page-desc{ font-size: 12px; }
+
+  .topbar{ gap: 22px; padding: 10px 22px; }
+  .nav-link{ font-size: 13px; padding: 10px 12px; }
+
+  .endbar__inner{ justify-content:center; }
+}
+
+/* =========================================================
+   INTRO ALL PROJECTS
+   (✅ important : ne PAS écraser le hover)
+========================================================= */
+.grid .p-card{
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.grid.is-entering .p-card{
+  animation: cardDrop .65s cubic-bezier(.22,.8,.24,1) forwards;
+  animation-delay: calc(var(--i, 0) * 110ms);
+}
+
+@keyframes cardDrop{
+  0%   { opacity: 0; transform: translateY(-26px) scale(.98); }
+  70%  { opacity: 1; transform: translateY(6px) scale(1); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ✅ État final : on fixe seulement l’opacité
+   (sinon ça casse le hover) */
+.grid.is-settled .p-card{
+  opacity: 1;
+  /* pas de transform ici */
+}
+
+@media (prefers-reduced-motion: reduce){
+  .grid .p-card{ opacity:1; transform:none; animation:none !important; }
+}
+
+</style>
+</head>
+
+<!-- =========================================================
+     ALL-PROJECTS — HTML + JS (à coller dans all-projects.html)
+     ⚠️ Ce fichier suppose que tu as déjà collé le CSS complet.
+========================================================= -->
+<body>
+
+    <!-- NAV -->
+<div class="topbar-wrap">
+
+  <!-- Desktop nav -->
+  <nav class="topbar" aria-label="Navigation principale">
+    <a class="nav-link nav-link--home" href="index.html" aria-label="Home">
+      <span class="sr-only">Home</span>
+    </a>
+
+    <div class="topbar-links">
+      <a class="nav-link" href="All-projects.html">Projets</a>
+      <a class="nav-link" href="Profil.html">Profil</a>
+      <a class="nav-link" href="Me-contacter.html">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Mobile : spirale Home à droite -->
+  <a class="mobile-home nav-link--home" href="index.html" aria-label="Home">
+    <span class="sr-only">Home</span>
+  </a>
+
+  <!-- Mobile burger : à droite -->
+  <button class="menu-toggle" id="menuBtn" aria-label="Ouvrir le menu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- Mobile popup (SANS HOME) -->
+  <div class="mobile-menu" id="mobileMenu" aria-label="Menu mobile">
+    <a class="nav-link" href="All-projects.html">Projets</a>
+    <a class="nav-link" href="Profil.html">Profil</a>
+    <a class="nav-link" href="Me-contacter.html">Contact</a>
+  </div>
+
+</div>
+
+  <main class="page">
+
+    <!-- HEADER -->
+    <section class="header-block" aria-label="En-tête All Projects">
+      <!-- Spiral rouge au-dessus du titre -->
+      <div class="header-spiral" aria-hidden="true"></div>
+      <div class="header-spiral" aria-hidden="true"></div>
+
+      <h1 class="page-title">MES PROJETS</h1>
+
+      <p class="page-desc">
+       Mes projets proposent des univers visuels immersifs et des interfaces interactives, pensés comme des expériences à explorer plutôt que de simples outils.
+      </p>
+
+      <!-- FILTRES -->
+      <div class="filters" aria-label="Filtres projets">
+        <button class="filter-btn is-active" data-filter="all" type="button">TOUT</button>
+        <button class="filter-btn" data-filter="pro" type="button">PROFESSIONNEL</button>
+        <button class="filter-btn" data-filter="school" type="button">ÉTUDIANT</button>
+      </div>
+    </section>
+
+    <!-- GRID CARDS (mosaïque) -->
+    <section class="grid" aria-label="Grille des projets">
+
+      <!-- =========================
+           EXEMPLES DE CARTES
+           - data-cat : "pro" ou "school"
+           - style : --bg-img + --img-opacity
+           - classe : c1, c2, c3... pour la disposition
+      ========================= -->
+
+      <article class="p-card c1" data-cat="school"
+        style="--i:1; 
+               --card-img:url('assets/images-g/kairos.png'); --img-opacity:.99; --img-size:70%; --img-pos:50% 35%; --img-size-filtered:80%;--img-pos-filtered:50% 50%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">KAIROS</h3>
+          <p class="p-card__sub">ECOLE · 2025</p>
+        </div>
+        <a class="p-card__btn" href="Projets/kairos.html" aria-label="Voir le projet KAIROS">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7"
+      
+            
+            stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c2" data-cat="school"
+        style="--i:2; --card-img:url('assets/images-g/ines-la-krass.png'); --img-opacity:.99; --img-size:80%; --img-pos:50% 35%;  --img-size-filtered:58%;--img-pos-filtered:50% 50%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Workshop Iness la krass</h3>
+          <p class="p-card__sub">ÉCOLE · 2025</p>
+        </div>
+        <a class="p-card__btn" href="Projets/ines-la-krass.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c3" data-cat="pro"
+        style="--i:3; --card-img:url('assets/images-g/torride-suite.png'); --img-opacity:.99; --img-size:65%; --img-pos:50% 50%;  --img-size-filtered:50%;--img-pos-filtered:50% 50%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Torride suite</h3>
+          <p class="p-card__sub">PRO · 2024</p>
+        </div>
+        <a class="p-card__btn" href="Projets/toride-suite.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c4" data-cat="pro"
+        style="--i:4; --card-img:url('assets/images-g/chambre-a-air.png'); --img-opacity:.99; --img-size:65%; --img-pos:50% 50%;  --img-size-filtered:50%;--img-pos-filtered:50% 50%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">CHAMBRE À AIR</h3>
+          <p class="p-card__sub">PRO · Fin prévu 2026</p>
+        </div>
+        <a class="p-card__btn" href="Projets/chambre-a-air.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c5" data-cat="school"
+        style="--i:5; --card-img:url('assets/images-g/bingo.png'); --img-opacity:.99; --img-size:80%; --img-pos:50% 50%;  --img-size-filtered:80%;--img-pos-filtered:50% 40%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">BIN'GO</h3>
+          <p class="p-card__sub">ECOLE · 2025</p>
+        </div>
+        <a class="p-card__btn" href="Projets/bin'go.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c6" data-cat="school"
+        style="--i:6; --card-img:url('assets/images-g/sherlock-holmes.png'); --img-opacity:.99; --img-size:100%; --img-pos:50% 10%; --img-size-filtered:100%;--img-pos-filtered:50% 50%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">SHERLOCK HOLMES</h3>
+          <p class="p-card__sub">ECOLE · 2025</p>
+        </div>
+        <a class="p-card__btn" href="Projets/sherlock holmes.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c7" data-cat="pro"
+        style="--i:7; --card-img:url('assets/images-g/fontenay-au-coeur.png'); --img-opacity:.99; --img-size:65%; --img-pos:50% 50%; --img-size-filtered:50%;--img-pos-filtered:50% 50%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">FONTENAY AU COEUR </h3>
+          <p class="p-card__sub">PRO · 2026</p>
+        </div>
+        <a class="p-card__btn" href="Projets/fontenay-au-coeur.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c8" data-cat="school"
+        style="--i:8; --card-img:url('assets/images-g/théâtre-des-effets.png'); --img-opacity:.99; --img-size:90%; --img-pos:50% 95%; --img-size-filtered:80%;--img-pos-filtered:50% 60%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Théâtre des effets</h3>
+          <p class="p-card__sub">ECOLE · 2025</p>
+        </div>
+        <a class="p-card__btn" href="Projets/théâtre-des-effets.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c9" data-cat="school"
+        style="--i:9; --card-img:url('assets/images-g/traversé-du-temps.png'); --img-opacity:.99; --img-size:80%; --img-pos:50% 100%; --img-size-filtered:58%;--img-pos-filtered:50% 40%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">Traversée du temps</h3>
+          <p class="p-card__sub">ÉCOLE · 2024</p>
+        </div>
+        <a class="p-card__btn" href="Projets/traversée-du-temps.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c10" data-cat="school"
+        style="--i:10; --card-img:url('assets/images-g/honor.png'); --img-opacity:.99; --img-size:55%; --img-pos:50% 100%; --img-size-filtered:58%;--img-pos-filtered:50% 1%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">LOCK-SCREEN</h3>
+          <p class="p-card__sub">ECOLE · 2026</p>
+        </div>
+        <a class="p-card__btn" href="Projets/lock-screen.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c11" data-cat="school"
+        style="--i:11; --card-img:url('assets/images-g/géocaching.png'); --img-opacity:.99; --img-size:80%; --img-pos:50% 50%; --img-size-filtered:70%;--img-pos-filtered:50% 50%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">GÉOCACHING</h3>
+          <p class="p-card__sub">ÉCOLE · 2024</p>
+        </div>
+        <a class="p-card__btn" href="Projets/géocaching.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c12" data-cat="pro"
+        style="--i:12; --card-img:url('assets/images-g/comptoir-des-soeurs.png'); --img-opacity:.99; --img-size:70%; --img-pos:50% 50%; --img-size-filtered:50%;--img-pos-filtered:50% 50%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">COMPTOIR DES SOEURS</h3>
+          <p class="p-card__sub">PRO · 2026</p>
+        </div>
+        <a class="p-card__btn" href="Projets/comptoir-des-soeurs.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c13" data-cat="school"
+        style="--i:13; --card-img:url('assets/images-g/tarot-perché.png'); --img-opacity:.99; --img-size:60%; --img-pos:50% 50%; --img-size-filtered:30%;--img-pos-filtered:60% 50%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">TAROT PERCHÉ</h3>
+          <p class="p-card__sub">ECOLE · 2024</p>
+        </div>
+        <a class="p-card__btn" href="Projets/tarot-perché.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c14" data-cat="school"
+        style="--i:14; --card-img:url('assets/images-g/aceso.png'); --img-opacity:.99; --img-size:80%; --img-pos:50% 50%; --img-size-filtered:50%;--img-pos-filtered:50% 50%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">ACESO</h3>
+          <p class="p-card__sub">ECOLE · 2024</p>
+        </div>
+        <a class="p-card__btn" href="Projets/aceso.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+      <article class="p-card c15" data-cat="pro"
+        style="--i:15; --card-img:url('assets/images-g/spoon-bar.png'); --img-opacity:.99; --img-size:65%; --img-pos:50% 50%; --img-size-filtered:58%;--img-pos-filtered:50% 50%;">
+        <div class="p-card__content">
+          <h3 class="p-card__title">SPOON BAR</h3>
+          <p class="p-card__sub">PRO · 2024</p>
+        </div>
+        <a class="p-card__btn" href="Projets/spoon-bar.html" aria-label="Voir le projet">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M7 17L17 7" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M10 7h7v7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </article>
+
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" aria-label="Call to action">
+      <div class="cta-spiral" aria-hidden="true"></div>
+      <h3>PRÊT À CRÉER<br><span class="word--accent">ENSEMBLE ?</span></h3>
+      <a class="cta__btn" href="Me-contacter.html">Discutons</a>
+    </section>
+
+  </main>
+
+<footer class="endbar" aria-label="Liens">
+  <div class="endbar__inner">
+    <a class="endbar__link" href="https://www.instagram.com/symbiose_studi0/" target="_blank" rel="noopener">INSTAGRAM</a>
+    <a class="endbar__link" href="https://www.linkedin.com/feed/" target="_blank" rel="noopener">LINKEDIN</a>
+  </div>
+</footer>
+
+<script>
+  // Filtres
+  const btns = document.querySelectorAll(".filter-btn");
+  const grid = document.querySelector(".grid");
+  const cards = document.querySelectorAll(".grid .p-card");
+
+  btns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      btns.forEach(b => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+
+      const filter = btn.dataset.filter;
+
+      if (filter === "all") {
+        grid.classList.remove("is-filtered");
+
+        cards.forEach(card => {
+          card.hidden = false;
+        });
+      } else {
+        grid.classList.add("is-filtered");
+
+        cards.forEach(card => {
+          card.hidden = card.dataset.cat !== filter;
+        });
+      }
+    });
+  });
+
+  // Burger
+  const menuBtn = document.getElementById("menuBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
+  if (menuBtn && mobileMenu){
+    menuBtn.addEventListener("click", () => mobileMenu.classList.toggle("open"));
+  }
+
+  // Intro cartes
+  window.addEventListener("load", () => {
+    const introCards = document.querySelectorAll(".grid .p-card");
+    if (!grid || !introCards.length) return;
+
+    grid.classList.add("is-entering");
+
+    const perCardDelay = 110;
+    const dropDur = 650;
+    const total = (introCards.length * perCardDelay) + dropDur;
+
+    setTimeout(() => {
+      grid.classList.remove("is-entering");
+      grid.classList.add("is-settled");
+    }, total);
+  });
+</script>
+
+</body>

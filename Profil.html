@@ -1,0 +1,1089 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Symbiose Studio — Profil</title>
+
+  <style>
+/* =========================================================
+   DESIGN TOKENS / VARIABLES
+========================================================= */
+:root{
+  --cream: #E4DED1;
+  --cream-dark: #D1C5AB;
+  --bordeaux: #220603;
+  --orange-pop: #CA2B02;
+  --red-orange: #EB4930;
+  --orange: #EF853D;
+  --yellow: #F3BC49;
+  --white: #F0EFEA;
+
+  --Fond: var(--cream);
+  --Texte-principal: var(--bordeaux);
+  --Texte-spécifique: var(--red-orange);
+  --Texte-endbar: var(--white);
+
+  --ff-title: "Pain de mie", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  --ff-body: "Outfit", system-ui, -apple-system, Segoe UI, Roboto, Arial;
+
+  --title-md: 140px;
+  --text-navbar: 16px;
+  --text-btn: 12px;
+  --text-capsul: 11px;
+  --text-endbar: 12px;
+  --spacing: .12em;
+
+  --glass-bg: rgba(240,239,234,.18);
+  --glass-bg-hover: rgba(240,239,234,.26);
+  --glass-border: rgba(240,239,234,.35);
+  --glass-highlight: rgba(255,255,255,.22);
+
+  --panel-bg: rgba(240,239,234,.30);
+  --panel-bg-hover: rgba(240,239,234,.40);
+  --panel-highlight: rgba(255,255,255,.22);
+  --panel-shadow: rgba(0,0,0,.16);
+
+  --shadow: rgba(0,0,0,.22);
+  --shadow-soft: rgba(0,0,0,.14);
+
+  --radius: 26px;
+  --gap: 22px;
+  --page-pad-x: 8vw;
+}
+
+/* =========================================================
+   FONTS
+========================================================= */
+@font-face{
+  font-family:"Pain de mie";
+  src:url("fonts/PainDeMie.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Outfit";
+  src:url("fonts/Outfit-Regular.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Outfit";
+  src:url("fonts/Outfit-Bold.woff2") format("woff2");
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+}
+
+/* =========================================================
+   BASE
+========================================================= */
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+
+body{
+  background: var(--Fond);
+  color: var(--Texte-principal);
+  font-family: var(--ff-body);
+  overflow-x:hidden;
+}
+
+@keyframes spin{
+  from{ transform: rotate(0deg); }
+  to{ transform: rotate(360deg); }
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+.topbar-wrap{
+  position: fixed;
+  top: 18px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 999;
+  pointer-events: none;
+}
+
+.topbar{
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+
+  width: min(1100px, calc(100vw - 40px));
+  padding: 10px 22px;
+  border-radius: 999px;
+
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+
+  box-shadow:
+    0 12px 34px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+.topbar-links{
+  display: flex;
+  align-items: center;
+  gap: 42px;
+  margin-left: auto;
+}
+
+.nav-link{
+  text-decoration: none;
+  color: var(--bordeaux);
+  font-size: var(--text-navbar);
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  padding: 10px 16px;
+  border-radius: 999px;
+  transition: transform .2s ease, background .2s ease;
+}
+.nav-link:hover{
+  transform: translateY(-1px);
+  background: var(--glass-bg-hover);
+}
+
+.nav-link--home{
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+}
+.nav-link--home::before{
+  content:"";
+  width: 40px;
+  height: 40px;
+  background: url("/assets/spiral-menu.png") center/contain no-repeat;
+  opacity: .95;
+  display: block;
+  transition: transform .25s ease, opacity .25s ease;
+}
+.nav-link--home:hover::before{
+  transform: rotate(12deg) scale(1.03);
+  opacity: 1;
+}
+
+.sr-only{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.mobile-home{
+  display: none;
+  pointer-events: auto;
+  position: fixed;
+  top: 18px;
+  left: 12px;
+  z-index: 2000;
+}
+
+.menu-toggle{
+  pointer-events: auto;
+  display: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  box-shadow:
+    0 12px 30px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  cursor: pointer;
+  position: fixed;
+  top: 18px;
+  right: 12px;
+  left: auto;
+  z-index: 2000;
+}
+.menu-toggle span{
+  display: block;
+  width: 22px;
+  height: 2px;
+  margin: 5px auto;
+  background: var(--bordeaux);
+  border-radius: 2px;
+}
+
+.mobile-menu{
+  pointer-events: auto;
+  position: fixed;
+  top: 96px;
+  right: 12px;
+  left: auto;
+  width: min(320px, calc(100vw - 24px));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transform: scaleY(0);
+  transform-origin: top right;
+  transition: .35s cubic-bezier(.34,1.56,.64,1);
+}
+.mobile-menu.open{ transform: scaleY(1); }
+
+.mobile-menu .nav-link{
+  display: block;
+  width: 100%;
+  text-align: right;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 12px 30px var(--shadow),
+    inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  transform: translateY(-10px);
+  opacity: 0;
+  transition: .35s;
+}
+.mobile-menu.open .nav-link{
+  transform: translateY(0);
+  opacity: 1;
+}
+.mobile-menu.open .nav-link:nth-child(1){ transition-delay:.05s; }
+.mobile-menu.open .nav-link:nth-child(2){ transition-delay:.12s; }
+.mobile-menu.open .nav-link:nth-child(3){ transition-delay:.19s; }
+
+@media (max-width: 850px){
+  .topbar{ display: none; }
+  .menu-toggle{ display: block; }
+  .mobile-home{ display: inline-grid; }
+}
+
+/* =========================================================
+   PAGE PROFIL
+========================================================= */
+.page{
+  padding: 120px var(--page-pad-x) 70px;
+  position: relative;
+}
+
+.profile-head{
+  position: relative;
+  text-align: center;
+  padding: 70px 0 30px;
+  margin-bottom: 34px;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.profile-head__spiral{
+  position: absolute;
+  top: -80px;                 /* remonte les spirales */
+  width: 350px;               /* taille beaucoup plus grande */
+  height: 350px;
+  background: url("assets/rosace.png") center/contain no-repeat;
+  opacity: .95;
+  pointer-events: none;
+  animation: spin 28s linear infinite;
+  z-index: 1;
+}
+
+.profile-head__spiral--left{
+  left: -280px;               /* sort de la page vers la gauche */
+}
+
+.profile-head__spiral--right{
+  right: -280px;              /* sort de la page vers la droite */
+  transform: scaleX(-1);
+}
+
+.profile-title{
+  margin: 0;
+  font-family: var(--ff-title);
+  font-weight: 400;
+  font-size: 120px;
+  line-height: .9;
+  color: var(--bordeaux);
+  text-shadow: 0 14px 28px var(--shadow-soft);
+  white-space: nowrap;
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================================================
+   LAYOUT GLOBAL
+========================================================= */
+.profile-layout{
+  margin-top: 34px;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr 0.42fr;
+  grid-template-areas:
+    "photo exp exp"
+    "photo formation formation"
+    "intro tools discuss";
+  gap: var(--gap);
+  align-items: stretch;
+}
+
+.card-area-photo{ grid-area: photo; }
+.card-area-exp{ grid-area: exp; }
+.card-area-formation{ grid-area: formation; }
+.card-area-intro{ grid-area: intro; }
+.card-area-tools{ grid-area: tools; }
+.card-area-discuss{ grid-area: discuss; }
+
+/* =========================================================
+   CARDS
+========================================================= */
+.card{
+  position: relative;
+  border-radius: 34px;
+  padding: 22px;
+  overflow: hidden;
+  isolation: isolate;
+
+  background: var(--panel-bg);
+  border: 1px solid var(--glass-border);
+
+  backdrop-filter: blur(10px) saturate(135%);
+  -webkit-backdrop-filter: blur(10px) saturate(135%);
+
+  box-shadow:
+    0 12px 30px var(--panel-shadow),
+    inset 0 1px 0 var(--panel-highlight);
+
+  color: var(--bordeaux);
+
+  transition:
+    transform .38s cubic-bezier(.22,.8,.24,1),
+    box-shadow .38s cubic-bezier(.22,.8,.24,1),
+    background .25s ease;
+}
+
+.card:hover{
+  transform: translateY(-6px) scale(1.015);
+  background: var(--panel-bg-hover);
+  box-shadow:
+    0 22px 48px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.26);
+}
+
+.card-title{
+  margin: 0 0 10px;
+  font-family: var(--ff-body);
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: var(--bordeaux);
+}
+
+/* =========================================================
+   PHOTO
+========================================================= */
+.card--photo{
+  min-height: 560px;
+  padding: 12px;
+  background: rgba(240,239,234,.38);
+}
+
+.card-photo__img{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+/* =========================================================
+   MON PROFIL
+========================================================= */
+.card-area-intro{
+  min-height: 260px;
+}
+
+.profile-text{
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(34,6,3,.72);
+}
+
+.profile-role{
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 10px;
+  color: var(--orange);
+}
+
+.profile-text p{
+  margin: 0 0 12px;
+}
+
+.profile-list{
+  margin: 8px 0 0 18px;
+  padding: 0;
+}
+
+.profile-list li{
+  margin-bottom: 6px;
+}
+
+/* Bouton CV */
+.cv-btn{
+  margin-top: 16px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.12),
+    inset 0 1px 0 var(--glass-highlight);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  color: var(--bordeaux);
+  text-decoration:none;
+  font-weight:700;
+  font-size: 12px;
+  letter-spacing: var(--spacing);
+  text-transform: uppercase;
+  transition: transform .2s ease, background .2s ease;
+}
+.cv-btn:hover{
+  transform: translateY(-2px);
+  background: var(--glass-bg-hover);
+}
+
+/* =========================================================
+   EXPERIENCES / FORMATION
+========================================================= */
+.card-area-exp,
+.card-area-formation{
+  min-height: 260px;
+}
+
+.timeline{
+  margin-top: 10px;
+  display:grid;
+  gap: 18px;
+  position: relative;
+  padding-left: 44px;
+}
+
+.timeline::before{
+  content:"";
+  position:absolute;
+  left: 18px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--bordeaux);
+  border-radius: 2px;
+}
+
+.item{
+  position: relative;
+}
+
+.item::before{
+  content:"";
+  position:absolute;
+  left: -33px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--orange);
+  opacity: .7;
+  border: 2px solid var(--orange);
+}
+
+.item-kicker{
+  font-size: 11px;
+  letter-spacing:.10em;
+  text-transform: uppercase;
+  color: rgba(34,6,3,.55);
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.item-title{
+  font-family: var(--ff-titre);
+  font-weight: 800;
+  font-size: 14px;
+  margin: 0 0 4px;
+  color: var(--bordeaux);
+}
+
+.item-desc{
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(34,6,3,.72);
+}
+
+/* =========================================================
+   OUTILS
+========================================================= */
+.card-area-tools{
+  min-height: 300px;
+  padding-bottom: 30px;
+}
+
+.tools-row{
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: start;
+  justify-items: center;
+  gap: 0;
+  margin-top: 26px;
+}
+
+.tool{
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* taille des logos */
+.tool img{
+  display: block;
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+}
+
+/* placement en quinconce */
+.tool:nth-child(1){
+  margin-top: 36px;
+}
+
+.tool:nth-child(2){
+  margin-top: 122px;
+}
+
+.tool:nth-child(3){
+  margin-top: 36px;
+}
+
+.tool:nth-child(4){
+  margin-top: 122px;
+}
+
+.tool-name{
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bordeaux);
+  letter-spacing: .08em;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* =========================================================
+   DISCUSS
+========================================================= */
+.card-area-discuss{
+  min-height: 340px;
+  padding: 34px 28px;
+  border-radius: 42px;
+}
+
+.discuss{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 34px;
+}
+
+.discuss .card-title{
+  margin: 0;
+  font-family: var(--ff-body);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.discuss .arrow{
+  width: 82px;
+  height: 82px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+
+  background: linear-gradient(
+    145deg,
+    var(--yellow),
+    var(--orange)
+  );
+
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.18),
+    inset 0 2px 4px rgba(255,255,255,.35);
+
+  align-self: center;
+  margin-top: 0;
+
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.discuss .arrow:hover{
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 14px 30px rgba(0,0,0,.22),
+    inset 0 2px 4px rgba(255,255,255,.45);
+}
+
+.discuss .arrow svg{
+  width: 30px;
+  height: 30px;
+  stroke: var(--bordeaux);
+}
+
+/* =========================================================
+   CTA
+========================================================= */
+.cta{
+  position: relative;
+  text-align:center;
+  padding: 110px 0 70px;
+  margin-top: 40px;
+}
+
+.cta h3{
+  margin:0;
+  font-family: var(--ff-title);
+  font-weight:400;
+  line-height:.9;
+  font-size: 120px;
+  color: var(--bordeaux);
+  text-shadow: 0 14px 28px var(--shadow-soft);
+}
+
+.cta-btn{
+  position: relative;
+  margin-top: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  min-width: 150px;
+  min-height: 56px;
+  padding: 6px 6px 6px 18px;
+  border-radius: 999px;
+
+  background: rgba(240,239,234,.34);
+  box-shadow:
+    0 4px 10px rgba(0,0,0,.035),
+    inset 0 1px 0 rgba(255,255,255,.22);
+
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+
+  color: var(--bordeaux);
+  text-decoration: none;
+
+  font-family: var(--ff-body);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1;
+
+  transition:
+    transform .15s ease,
+    background .15s ease;
+}
+
+.cta-btn:hover{
+  transform: translateY(-1px);
+  background: rgba(240,239,234,.40);
+}
+
+.cta-btn::after{
+  content:"";
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+
+  background: radial-gradient(
+    circle at 30% 30%,
+    #F3BC49 0%,
+    #EF853D 60%,
+    #EB4930 100%
+  );
+
+  box-shadow:
+    0 4px 10px rgba(0,0,0,.06),
+    inset 0 2px 6px rgba(255,255,255,.15);
+}
+
+.cta-btn::before{
+  content:"";
+  position:absolute;
+
+  width: 20px;
+  height: 20px;
+
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 17L17 7' stroke='%23220603' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M10 7h7v7' stroke='%23220603' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cta-spiral{
+  position:absolute;
+  bottom: 24px;
+  width: 260px;
+  height: 260px;
+  opacity: .95;
+  pointer-events:none;
+  background: url("assets/rosace.png") center/contain no-repeat;
+}
+.cta-spiral--left{ left: -60px; transform: scaleX(-1); }
+.cta-spiral--right{ right: -60px; }
+
+/* =========================================================
+   FOOTER
+========================================================= */
+.endbar{
+  width: 100%;
+  background: var(--cream-dark);
+  padding: 34px var(--page-pad-x);
+}
+.endbar__inner{
+  display:flex;
+  justify-content:flex-end;
+  gap:22px;
+}
+.endbar__link{
+  font-family: var(--ff-body);
+  font-weight:700;
+  font-size: var(--text-endbar);
+  letter-spacing: var(--spacing);
+  text-transform:uppercase;
+  text-decoration:none;
+  color: var(--Texte-endbar);
+}
+.endbar__link:hover{ opacity:.85; }
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 980px){
+  .page{ padding: 110px 6vw 60px; }
+
+  .profile-title{
+    font-size: 92px;
+    white-space: normal;
+  }
+
+.profile-head{
+  min-height: 180px;
+  padding: 40px 0 20px;
+}
+
+.profile-head__spiral{
+  width: 170px;
+  height: 170px;
+  top: 50%;
+}
+
+.profile-head__spiral--left{
+  left: -20px;
+  transform: translateY(-50%);
+}
+
+.profile-head__spiral--right{
+  right: -20px;
+  transform: translateY(-50%) scaleX(-1);
+}
+.profile-head__spiral--left{ left: -10px; }
+.profile-head__spiral--right{ right: -10px; }
+
+  .profile-layout{
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "photo"
+      "exp"
+      "formation"
+      "intro"
+      "tools"
+      "discuss";
+  }
+
+  .card--photo,
+  .card-area-exp,
+  .card-area-formation,
+  .card-area-intro,
+  .card-area-tools,
+  .card-area-discuss{
+    min-height: auto;
+  }
+
+  .tools-row{
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .cta h3{ font-size: 88px; }
+}
+
+@media (max-width: 560px){
+  .profile-title{
+    font-size: 56px;
+    white-space: normal;
+  }
+
+.profile-head{
+  padding-top: 28px;
+}
+
+.profile-head__spiral{
+  width: 110px;
+  height: 110px;
+  top: 34px;
+}
+.profile-head__spiral--left{ left: -28px; }
+.profile-head__spiral--right{ right: -28px; }
+
+  .tools-row{
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .endbar__inner{ justify-content:center; }
+
+  .cta-spiral{
+    width: 220px;
+    height: 220px;
+  }
+  .cta-spiral--left{ left: -90px; }
+  .cta-spiral--right{ right: -90px; }
+}
+
+/* =========================================================
+   OPTION NO-STROKE
+========================================================= */
+.topbar,
+.menu-toggle,
+.mobile-menu .nav-link,
+.card,
+.cv-btn,
+.cta-btn,
+.discuss .arrow{
+  border: none !important;
+}
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <div class="topbar-wrap">
+    <nav class="topbar" aria-label="Navigation principale">
+      <a class="nav-link nav-link--home" href="index.html" aria-label="Home">
+        <span class="sr-only">Home</span>
+      </a>
+
+      <div class="topbar-links">
+        <a class="nav-link" href="All-projects.html">Projets</a>
+        <a class="nav-link" href="Profil.html">Profil</a>
+        <a class="nav-link" href="Me-contacter.html">Contact</a>
+      </div>
+    </nav>
+
+    <a class="mobile-home nav-link--home" href="index.html" aria-label="Home">
+      <span class="sr-only">Home</span>
+    </a>
+
+    <button class="menu-toggle" id="menuBtn" aria-label="Ouvrir le menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="mobile-menu" id="mobileMenu" aria-label="Menu mobile">
+      <a class="nav-link" href="All-projects.html">Projets</a>
+      <a class="nav-link" href="Profil.html">Profil</a>
+      <a class="nav-link" href="Me-contacter.html">Contact</a>
+    </div>
+  </div>
+
+  <main class="page">
+
+    <header class="profile-head">
+      <div class="profile-head__spiral profile-head__spiral--left" aria-hidden="true"></div>
+      <div class="profile-head__spiral profile-head__spiral--right" aria-hidden="true"></div>
+      <h1 class="profile-title">LORETTE HOCBON</h1>
+    </header>
+
+    <section class="profile-layout" aria-label="Profil">
+
+      <div class="card card--photo card-area-photo" aria-label="Photo / illustration">
+        <img src="assets/portrait-2.png" alt="Portrait de Lorette Hocbon" class="card-photo__img">
+      </div>
+
+      <div class="card card-area-exp">
+        <h2 class="card-title">Experiences pros</h2>
+
+        <div class="timeline" aria-label="Timeline expériences">
+          <div class="item">
+            <div class="item-kicker">2019-2026</div>
+            <h3 class="item-title">Emploi saisonnier (Juillet-Août)</h3>
+            <p class="item-desc">Horticulture (2 saisons) - Interim (1 saison)- Vente (4 saisons)</p>
+          </div>
+
+          <div class="item">
+            <div class="item-kicker">2025</div>
+            <h3 class="item-title">Stage bachelor (2 mois)</h3>
+            <p class="item-desc">Assistance sur les pôles : communication, évènementiel, gestion de chantier chez BUREAU CURARE à Fontenay le Comte.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-kicker">2025</div>
+            <h3 class="item-title">Création micro-entreprise SYMBIOSE STUDIO</h3>
+            <p class="item-desc">En parallèle des études, création et dépôt du statut de micro-entreprise.</p>
+          </div>
+
+          <div class="item">
+            <div class="item-kicker">2020</div>
+            <h3 class="item-title">Stage de découverte</h3>
+            <p class="item-desc">Découverte de l’architecture d'intérieur et de la modélisation 3D chez LABEL EXPERIENCES à Paris.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-area-formation">
+        <h2 class="card-title">Formation</h2>
+
+        <div class="timeline" aria-label="Timeline formation">
+          <div class="item">
+            <div class="item-kicker">Ecole de design Nantes Atlantiques</div>
+            <h3 class="item-title">Année 3</h3>
+            <p class="item-desc">Continuité en design numérique UXUI (consolidation des acquis de la création digitale).</p>
+          </div>
+
+          <div class="item">
+            <div class="item-kicker">Ecole de design Nantes Atlantiques</div>
+            <h3 class="item-title">Année 2</h3>
+            <p class="item-desc">Spécialisation en design numérique UXUI (premiers acquis de la création digitale).</p>
+          </div>
+
+          <div class="item">
+            <div class="item-kicker">Ecole de design Nantes Atlantiques</div>
+            <h3 class="item-title">Année 1</h3>
+            <p class="item-desc">Découverte des modules : design d’espace, d’objet, numérique et graphique.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-area-intro">
+        <h2 class="card-title">Qui je suis ?</h2>
+
+        <div class="profile-text">
+          <h3 class="profile-role">Designer UX/UI</h3>
+
+          <p>
+            J’aime concevoir des interfaces claires, esthétiques et agréables à utiliser.
+            Je porte une attention particulière aux détails et à la cohérence visuelle.
+          </p>
+
+          <ul class="profile-list">
+            <li>Curieuse et créative, j’aime explorer des idées et les transformer en projets concrets.</li>
+            <li>Intéressée par l’innovation et les usages numériques, j’aime explorer de nouvelles façons de concevoir et d’utiliser les interfaces.</li>
+          </ul>
+        </div>
+
+        <a class="cv-btn" href="assets/CV - Alterance.pdf" download="CV - Alterance.pdf">Télécharger mon CV</a>
+      </div>
+
+      <div class="card card-area-tools">
+        <h2 class="card-title">Mes outils fétiches</h2>
+
+        <div class="tools-row" aria-label="Outils">
+          <div class="tool">
+            <img src="assets/logo-figma.png" alt="Figma">
+            <span class="tool-name">Figma</span>
+          </div>
+
+          <div class="tool">
+            <img src="assets/logo-visualcode.png" alt="Visual Studio Code">
+            <span class="tool-name">VS Code</span>
+          </div>
+
+          <div class="tool">
+            <img src="assets/logo-illustrator.png" alt="Illustrator">
+            <span class="tool-name">Illustrator</span>
+          </div>
+
+          <div class="tool">
+            <img src="assets/logo-premierpro.png" alt="Premiere Pro">
+            <span class="tool-name">Premiere Pro</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card discuss card-area-discuss">
+        <div>
+          <h2 class="card-title">UN PROJET ?<br>DISCUTONS !</h2>
+        </div>
+
+        <a class="arrow" href="Me-contacter.html" aria-label="Aller à la page contact">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M8 5l8 7-8 7" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+    </section>
+
+    <section class="cta" aria-label="Call to action">
+      <div class="cta-spiral cta-spiral--left" aria-hidden="true"></div>
+      <div class="cta-spiral cta-spiral--right" aria-hidden="true"></div>
+
+      <h3>RESTEZ CURIEUX</h3>
+      <a class="cta-btn" href="All-projects.html">Voir mes projets</a>
+    </section>
+
+  </main>
+
+<footer class="endbar" aria-label="Liens">
+  <div class="endbar__inner">
+    <a class="endbar__link" href="https://www.instagram.com/symbiose_studi0/" target="_blank" rel="noopener">INSTAGRAM</a>
+    <a class="endbar__link" href="https://www.linkedin.com/feed/" target="_blank" rel="noopener">LINKEDIN</a>
+  </div>
+</footer>
+
+  <script>
+    document.getElementById("menuBtn")?.addEventListener("click", () => {
+      document.getElementById("mobileMenu")?.classList.toggle("open");
+    });
+  </script>
+
+</body>
+</html>
