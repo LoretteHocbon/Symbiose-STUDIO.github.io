@@ -182,7 +182,7 @@ body{
   content:"";
   width: 40px;
   height: 40px;
-  background: url("/assets/spiral-menu.png") center/contain no-repeat;
+  background: url("assets/spiral.png") center/contain no-repeat;
   opacity: .95;
   display: block;
   transition: transform .25s ease, opacity .25s ease;
@@ -830,13 +830,12 @@ body{
 }
 
 .grid.is-entering .p-card{
-  animation: cardDrop .65s cubic-bezier(.22,.8,.24,1) forwards;
-  animation-delay: calc(var(--i, 0) * 110ms);
+  animation: cardDrop .38s cubic-bezier(.22,.8,.24,1) forwards;
+  animation-delay: calc(var(--i, 0) * 35ms);
 }
 
 @keyframes cardDrop{
-  0%   { opacity: 0; transform: translateY(-26px) scale(.98); }
-  70%  { opacity: 1; transform: translateY(6px) scale(1); }
+  0%   { opacity: 0; transform: translateY(-14px) scale(.99); }
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
